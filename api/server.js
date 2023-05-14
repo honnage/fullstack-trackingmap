@@ -2,8 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
 
-import morgan from 'morgan'
-import cors from 'cors'
+const morgan = require('morgan')
+const cors = require('cors')
 
 require('dotenv').config()
 // import router from './routes/api'
@@ -14,8 +14,19 @@ const trackerRoutes = require('./routes/web/tracker')
 
 // controllers
 const errorController = require('./controllers/error') // controllers error
+const sequelize = require('./util/database')
 
 const port = process.env.SERVER_POST || 3066
+const db = require('./util/database')
+
+db.execute('SELECT * FROM products')
+.then(result => {
+    console.log(result)
+})
+.catch(err => {
+    console.log(err)
+})
+
 const app = express()
 
 app.set('view engine', 'ejs')
@@ -38,3 +49,4 @@ app.use(errorController.get404) // page not found
 app.listen(port, () => {
     console.log(`Server runnning on port ${port}`)
 })
+
