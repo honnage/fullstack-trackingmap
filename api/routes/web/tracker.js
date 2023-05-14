@@ -8,6 +8,6 @@ router.get('/dashboard-test', trackerController.getDashboardTest)
 
 router.post('/sendData', trackerController.sendData)
 
-
+router.get('/lastTracing', trackerController.lastTracing_byDevices)
 
 module.exports = router

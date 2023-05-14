@@ -1,74 +1,135 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <%- include('./layouts/head.ejs') %>
 
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
-  <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
-  <style>
-    #map {
-      position: absolute;
-      top: 60px;
-      bottom: 0;
-      padding-right: 10px;
-      width: 100%;
-    }
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      #map {
+        position: absolute;
+        top: 60px;
+        bottom: 0;
+        padding-right: 10px;
+        width: 100%;
+      }
 
-    /* .mapboxgl-ctrl .mapboxgl-ctrl-group {
+      /* .mapboxgl-ctrl .mapboxgl-ctrl-group {
         position: absolute;
         left: 0;
     } */
-  </style>
+    </style>
 </head>
+
 <body>
   <%- include('./layouts/header.ejs') %>
-  <%- include('./layouts/sidebar.ejs') %>
+    <%- include('./layouts/sidebar.ejs') %>
 
-  <main id="main" class="main">
-    <div id='map'></div>
-  </main>
+      <main id="main" class="main">
+        <div id='map'></div>
+      </main>
 
-  <script>
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic3VnYXJzcGljeTAwOSIsImEiOiJja3JuZWR0aXgxemtjMndwZW5tbjg5MG04In0.iSpsJUrbQiX1Z2OjIiRcFw'; // ต้องเปลี่ยนเป็น access token ของคุณ
-    var map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11', // สามารถเปลี่ยนได้ตามต้องการ
-      center: [100.6060742685167, 13.855035407124475], // กำหนดพิกัดเริ่มต้นของแผนที่ latitude, longitude
-      zoom: 10 // กำหนดระดับการซูมเริ่มต้น
-    });
+      <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic3VnYXJzcGljeTAwOSIsImEiOiJja3JuZWR0aXgxemtjMndwZW5tbjg5MG04In0.iSpsJUrbQiX1Z2OjIiRcFw'; // ต้องเปลี่ยนเป็น access token ของคุณ
+        var map = new mapboxgl.Map({
+          container: 'map',
+          style: 'mapbox://styles/mapbox/streets-v11', // สามารถเปลี่ยนได้ตามต้องการ
+          center: [100.6060742685167, 13.855035407124475], // กำหนดพิกัดเริ่มต้นของแผนที่ latitude, longitude
+          zoom: 10 // กำหนดระดับการซูมเริ่มต้น
+        });
 
-    map.addControl(new mapboxgl.NavigationControl(), 'top-left'); // เพิ่มปุ่ม zoom in และ zoom out ด้านซ้ายบน
+        map.addControl(new mapboxgl.NavigationControl(), 'top-left'); // เพิ่มปุ่ม zoom in และ zoom out ด้านซ้ายบน
 
-    let deviceId = 'ALAP-TCP-1(957)'
-    let temperature = 30
-    let lat = '100.6060742686167'
-    let longi = '13.855035407124465'
+        let deviceId = 'ALAP-TCP-1(957)'
+        let temperature = 30
+        let lat = '100.6060742686167'
+        let longi = '13.855035407124465'
 
-    let marker1 = new mapboxgl.Marker()
-    .setLngLat([100.5843378, 13.8767561])
-    .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
-    .addTo(map);
-
-
-    let marker2 = new mapboxgl.Marker({ color: 'black', rotation: 0 })
-    .setLngLat([100.6060742686167, 13.855035407124465])
-    .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
-    .addTo(map);
+        // let marker1 = new mapboxgl.Marker()
+        // .setLngLat([100.5843378, 13.8767561])
+        // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
+        // .addTo(map);
 
 
-    setInterval(function () {
-      console.log('reface')
-      // getLastData("ALAP-TCP-2(902)");
-      // getLastData("ALAP-TCP-1(957)");
-      // getLastData("ALAP-TCP-3(355)");
-      // getLastData("ALAP-TCP-4(027)");
-      // getLastData("867730051235566");
-    }, (60 * 1000));
+        // let marker2 = new mapboxgl.Marker({ color: 'black', rotation: 0 })
+        // .setLngLat([100.6060742686167, 13.855035407124465])
+        // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
+        // .addTo(map);
 
-    console.log('xxx',)
-    console.log('data xxx', data)
-  </script>
+        function getData() {
+          axios.get('/lastTracing')
+            .then(response => {
+              let row = response.data.data
+              // console.log('data', row)
 
-<%- include('./layouts/footer.ejs') %>
+              for (let i = 0; i < row.length; i++) {
 
+                const latitude = row[i].latitude
+                const longitude = row[i].longitude
+                const hereName = row[i].hereName
+                const attitude = row[i].attitude
 
+                switch (i) {
+                  case 0:
+                    colorColor = "red";
+                    break;
+                  case 1:
+                    colorColor = "blue";
+                    break;
+                  case 2:
+                    colorColor = "black";
+                    break;
+                  case 3:
+                    colorColor = "orange";
+                    break;
+                  case 4:
+                    colorColor = "green";
+                    break;
+                  case 5:
+                    colorColor = "brown";
+                    break;
+                  case 6:
+                    colorColor = "purple";
+                }
+
+                let marker = new mapboxgl.Marker({ color: colorColor, rotation: 0 })
+                  .setLngLat([longitude, latitude])
+                  .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${hereName}<br>Temperature: ${attitude}`))
+                  .addTo(map)
+              }
+
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+
+        setInterval(function () {
+          console.log('reface')
+        }, (60 * 1000));
+
+        function initial() {
+          getData()
+          // getSiteList()
+          // getLastData("ALAP-TCP-2(902)");
+          // getLastData("ALAP-TCP-1(957)");
+          // getLastData("ALAP-TCP-3(355)");
+          // getLastData("ALAP-TCP-4(027)");
+          // getLastData("867730051235566");
+        }
+
+        initial()
+
+        setInterval(function () {
+
+          // getLastData("ALAP-TCP-2(902)");
+          // getLastData("ALAP-TCP-1(957)");
+          // getLastData("ALAP-TCP-3(355)");
+          // getLastData("ALAP-TCP-4(027)");
+          // getLastData("867730051235566");
+        }, (60 * 1000));
+
+      </script>
+
+      <%- include('./layouts/footer.ejs') %>

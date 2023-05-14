@@ -1,14 +1,31 @@
 const Devices = require('../models/devices')
-
+const devicesServices = require('../services/devices')
+const transactionsServices = require('../services/transactions')
 
 const momenttz = require('moment-timezone')
 const db = require('./db')
 
+exports.lastTracing_byDevices = async (req, res, next) => {
+    try {
+        const transactions =  await transactionsServices.lastTracing_byDevices(req)
+        await res.json({
+            data: transactions,
+          })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 exports.getIndex = async (req, res, next) => {
     try {
-        const devices = await Devices.findAll({ raw: true });
+        const devices = await devicesServices.getAllDevices(req)
+        const transactions =  await transactionsServices.lastTracing_byDevices(req)
+
         const data = {
-            devices: devices
+            devices: devices,
+            tracing: transactions
         }
         res.render('tracker', {
             data: data,
@@ -23,7 +40,7 @@ exports.getIndex = async (req, res, next) => {
 
 exports.getDashboardTest = async (req, res, next) => {
     try {
-        const devices = await Devices.findAll({ raw: true });
+        const devices = await devicesServices.getAllDevices(req)
         const data = {
             devices: devices
         }
