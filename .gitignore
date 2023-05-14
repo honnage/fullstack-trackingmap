@@ -1,6 +1,9 @@
+api/node_modules
+api/.env
+
 /node_modules
 /tracker
 tracker.zip
 
-api/node_modules
-api/.env
+/template
+/template/NiceAdmin

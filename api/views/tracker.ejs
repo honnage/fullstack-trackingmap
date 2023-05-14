@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset='utf-8' />
-  <title>Mapbox GL JS</title>
-  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <%- include('./layouts/head.ejs') %>
+
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
   <style>
-    body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #map {
+      position: absolute;
+      top: 60px;
+      bottom: 0;
+      padding-right: 10px;
+      width: 100%;
+    }
 
-    .mapboxgl-ctrl .mapboxgl-ctrl-group {
+    /* .mapboxgl-ctrl .mapboxgl-ctrl-group {
         position: absolute;
         left: 0;
-    }
+    } */
   </style>
 </head>
 <body>
-  <div id='map'></div>
+  <%- include('./layouts/header.ejs') %>
+  <%- include('./layouts/sidebar.ejs') %>
+
+  <main id="main" class="main">
+    <div id='map'></div>
+  </main>
+
   <script>
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3VnYXJzcGljeTAwOSIsImEiOiJja3JuZWR0aXgxemtjMndwZW5tbjg5MG04In0.iSpsJUrbQiX1Z2OjIiRcFw'; // ต้องเปลี่ยนเป็น access token ของคุณ
     var map = new mapboxgl.Map({
@@ -55,6 +65,7 @@
       // getLastData("867730051235566");
     }, (60 * 1000));
   </script>
-</body>
-</html>
+
+<%- include('./layouts/footer.ejs') %>
+
 
