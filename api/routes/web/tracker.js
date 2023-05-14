@@ -4,6 +4,7 @@ const trackerController = require('../../controllers/tracker')
 
 
 router.get('/', trackerController.getIndex)
+router.get('/dashboard-test', trackerController.getDashboardTest)
 
 
 

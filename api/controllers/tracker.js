@@ -5,3 +5,11 @@ exports.getIndex = (req, res, next) => {
         path: '/'
     })
 }
+
+exports.getDashboardTest = (req, res, next) => {
+    res.render('dashboard-test', {
+        data: '',
+        pageTitle: 'Dashboard test',
+        path: '/dashboard-test'
+    })
+}
