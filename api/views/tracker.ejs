@@ -51,12 +51,6 @@
         // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
         // .addTo(map);
 
-
-        // let marker2 = new mapboxgl.Marker({ color: 'black', rotation: 0 })
-        // .setLngLat([100.6060742686167, 13.855035407124465])
-        // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
-        // .addTo(map);
-
         function getData() {
           axios.get('/lastTracing')
             .then(response => {
@@ -64,11 +58,12 @@
               // console.log('data', row)
 
               for (let i = 0; i < row.length; i++) {
-
                 const latitude = row[i].latitude
                 const longitude = row[i].longitude
                 const hereName = row[i].hereName
                 const attitude = row[i].attitude
+                const deviceId = row[i].deviceId
+                const lasttime  = row[i].formattedCreatedAt
 
                 switch (i) {
                   case 0:
@@ -95,7 +90,14 @@
 
                 let marker = new mapboxgl.Marker({ color: colorColor, rotation: 0 })
                   .setLngLat([longitude, latitude])
-                  .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${hereName}<br>Temperature: ${attitude}`))
+                  .setPopup(new mapboxgl
+                    .Popup()
+                    .setHTML(`
+                      <b>Tracker</b><br>
+                      Device ID:  ${deviceId}<br>
+                      Sensor No.: ${hereName}<br>
+                      Temperature: ${attitude}<br>
+                      Last Time: ${lasttime}`))
                   .addTo(map)
               }
 
@@ -111,23 +113,12 @@
 
         function initial() {
           getData()
-          // getSiteList()
-          // getLastData("ALAP-TCP-2(902)");
-          // getLastData("ALAP-TCP-1(957)");
-          // getLastData("ALAP-TCP-3(355)");
-          // getLastData("ALAP-TCP-4(027)");
-          // getLastData("867730051235566");
         }
 
         initial()
 
         setInterval(function () {
-
-          // getLastData("ALAP-TCP-2(902)");
-          // getLastData("ALAP-TCP-1(957)");
-          // getLastData("ALAP-TCP-3(355)");
-          // getLastData("ALAP-TCP-4(027)");
-          // getLastData("867730051235566");
+          getData()
         }, (60 * 1000));
 
       </script>
