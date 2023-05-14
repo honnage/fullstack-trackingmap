@@ -17,15 +17,14 @@ const errorController = require('./controllers/error') // controllers error
 const sequelize = require('./util/database')
 
 const port = process.env.SERVER_POST || 3066
-const db = require('./util/database')
-
-db.execute('SELECT * FROM products')
-.then(result => {
-    console.log(result)
-})
-.catch(err => {
-    console.log(err)
-})
+// const db = require('./util/database')
+// db.execute('SELECT * FROM products')
+// .then(result => {
+//     console.log(result)
+// })
+// .catch(err => {
+//     console.log(err)
+// })
 
 const app = express()
 
@@ -50,3 +49,11 @@ app.listen(port, () => {
     console.log(`Server runnning on port ${port}`)
 })
 
+sequelize
+.sync()
+.then(result => {
+    console.log('Connect database success !!')
+})
+.catch(err => {
+    console.log('Connect database fail !', err)
+})
