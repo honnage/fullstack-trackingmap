@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Mapbox GL JS</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css' rel='stylesheet' />
+  <style>
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+    .mapboxgl-ctrl .mapboxgl-ctrl-group {
+        position: absolute;
+        left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div id='map'></div>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3VnYXJzcGljeTAwOSIsImEiOiJja3JuZWR0aXgxemtjMndwZW5tbjg5MG04In0.iSpsJUrbQiX1Z2OjIiRcFw'; // ต้องเปลี่ยนเป็น access token ของคุณ
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11', // สามารถเปลี่ยนได้ตามต้องการ
+      center: [100.6060742685167, 13.855035407124475], // กำหนดพิกัดเริ่มต้นของแผนที่ latitude, longitude
+      zoom: 10 // กำหนดระดับการซูมเริ่มต้น
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-left'); // เพิ่มปุ่ม zoom in และ zoom out ด้านซ้ายบน
+
+    let deviceId = 'ALAP-TCP-1(957)'
+    let temperature = 30
+    let lat = '100.6060742686167'
+    let longi = '13.855035407124465'
+
+    let marker1 = new mapboxgl.Marker()
+    .setLngLat([100.5843378, 13.8767561])
+    .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
+    .addTo(map);
+
+
+    let marker2 = new mapboxgl.Marker({ color: 'black', rotation: 0 })
+    .setLngLat([100.6060742686167, 13.855035407124465])
+    .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
+    .addTo(map);
+
+
+    setInterval(function () {
+      console.log('reface')
+      // getLastData("ALAP-TCP-2(902)");
+      // getLastData("ALAP-TCP-1(957)");
+      // getLastData("ALAP-TCP-3(355)");
+      // getLastData("ALAP-TCP-4(027)");
+      // getLastData("867730051235566");
+    }, (60 * 1000));
+  </script>
+</body>
+</html>
+
