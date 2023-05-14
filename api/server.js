@@ -11,6 +11,8 @@ require('dotenv').config()
 
 // routes web
 const trackerRoutes = require('./routes/web/tracker')
+const devicesRoutes = require('./routes/web/devices')
+
 
 // controllers
 const errorController = require('./controllers/error') // controllers error
@@ -43,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // app.use('api', router)
 app.use(trackerRoutes)
+app.use(devicesRoutes)
 app.use(errorController.get404) // page not found
 
 app.listen(port, () => {

@@ -25,3 +25,9 @@ exports.sendData = (req, res, next) => {
     console.log('req body', req.body)
 
 }
+
+
+exports.insertDevice = (req, res, next) => {
+    console.log('insertDevice')
+    console.log('req body', req.body)
+}
