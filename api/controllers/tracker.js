@@ -3,20 +3,38 @@ const DevicesWialon = require('../models/devicesWialon')
 const Transactions = require('../models/transactions')
 const TransactionsWialon = require('../models/transactionsWialon')
 
-exports.getIndex = (req, res, next) => {
-    res.render('tracker', {
-        data: '',
-        pageTitle: 'Dashboard',
-        path: '/'
-    })
+exports.getIndex = async (req, res, next) => {
+    try {
+        const devices = await Devices.findAll({ raw: true });
+        const data = {
+            devices: devices
+        }
+        res.render('tracker', {
+            data: data,
+            pageTitle: 'Dashboard',
+            path: '/'
+        })
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
 }
 
-exports.getDashboardTest = (req, res, next) => {
-    res.render('dashboard-test', {
-        data: '',
-        pageTitle: 'Dashboard test',
-        path: '/dashboard-test'
-    })
+exports.getDashboardTest = async (req, res, next) => {
+    try {
+        const devices = await Devices.findAll({ raw: true });
+        const data = {
+            devices: devices
+        }
+        res.render('dashboard-test', {
+            data: data,
+            pageTitle: 'xx Dashboard',
+            path: '/dashboard-test'
+        });
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
 }
 
 
