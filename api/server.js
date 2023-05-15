@@ -33,7 +33,6 @@ app.use(morgan('dev', {
         write: function (message) {
             console.log(message)
             const logData =  message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ')
-
             Log.create({
                 method: logData[0],
                 path: logData[1],
@@ -42,7 +41,7 @@ app.use(morgan('dev', {
                 level: 'info',
                 functionCallBy: '',
                 timestamp: new Date()
-            });
+            })
         }
     },
     skip: (req, res) => {

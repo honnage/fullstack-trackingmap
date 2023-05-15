@@ -9,6 +9,23 @@ exports.getDevice = async (req, res, next) => {
     console.log('getDevice')
     console.log('req params', req.params)
 
+    try {
+        const devices = await devicesServices.getAllDevices(req)
+        const transactions =  await transactionsServices.lastTracing_byDevices(req)
+
+        const data = {
+            devices: devices,
+            tracing: transactions
+        }
+        res.render('tracker', {
+            data: data,
+            pageTitle: 'Device Tracking',
+            path: `${req.params}`
+        })
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
 }
 
 exports.lastTracing_byDevices = async (req, res, next) => {

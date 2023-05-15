@@ -5,7 +5,7 @@ const trackerController = require('../../controllers/tracker')
 
 router.get('/', trackerController.getIndex)
 
-// router.get('/device/:deviceId', trackerController.getDevice) // by device
+router.get('/device/:deviceId', trackerController.getDevice) // by device
 
 router.get('/dashboard-test', trackerController.getDashboardTest)
 
