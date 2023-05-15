@@ -1,16 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const trackerController = require('../../controllers/tracker')
+const authCheck = require('../../controllers/authMiddleware')
 
 
-router.get('/', trackerController.getIndex)
+router.get('/', authCheck, trackerController.getIndex)
 
-router.get('/device/:deviceId', trackerController.getDevice) // by device
+router.get('/device/:deviceId', authCheck, trackerController.getDevice) // by device
 
-router.get('/dashboard-test', trackerController.getDashboardTest)
+router.get('/dashboard-test', authCheck, trackerController.getDashboardTest)
 
 router.post('/sendData', trackerController.sendData)
 
-router.get('/lastTracing', trackerController.lastTracing_byDevices)
+router.get('/lastTracing', authCheck, trackerController.lastTracing_byDevices)
 
 module.exports = router

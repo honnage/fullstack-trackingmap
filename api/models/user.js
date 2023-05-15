@@ -26,6 +26,16 @@ const Users = sequelize.define('users', {
         allowNull: true,
         field: 'password'
     },
+    firstname: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        field: 'firstname'
+    },
+    lastname: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        field: 'lastname'
+    },
     projectname: {
         type: Sequelize.STRING,
         allowNull: true,

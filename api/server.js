@@ -7,9 +7,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const cookieSession = require('cookie-session')
 
-
 require('dotenv').config()
-// import router from './routes/api'
 
 // models
 const Log = require('./models/log')
@@ -19,7 +17,6 @@ const trackerRoutes = require('./routes/web/tracker')
 const devicesRoutes = require('./routes/web/devices')
 const profileRoutes = require('./routes/web/profile')
 const authenticationRoutes = require('./routes/web/authentication')
-
 
 // controllers
 const errorController = require('./controllers/error') // controllers error
@@ -35,39 +32,47 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
-
-
-// show log and save log to database
-app.use(morgan('dev', {
-    stream: {
-        write: function (message) {
-            console.log(message)
-            const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ')
-            Log.create({
-                method: logData[0],
-                path: logData[1],
-                status: logData[2],
-                timeProcess: logData[3] + ' ' + logData[4] + '' + logData[5] + '' + logData[6],
-                level: 'info',
-                callApiBy: '',
-                timestamp: new Date()
-            })
-        }
-    },
-    skip: (req, res) => {
-        return (
-            req.path.startsWith('/assets') ||
-            req.path.startsWith('/device/assets')
-        )
-    }
-}))
-
+app.use(bodyParser.text());
 
 app.use(cookieSession({
     name: 'session',
     keys: ['key1', 'key2'],
     maxAge: 60 * 60 * 1000 // 1 hr
 }))
+
+// ดึงข้อมูลผู้ใช้จาก session.user
+// app.use((req, res, next) => {
+//     console.log('sessionUser', req.session.user)
+//     next()
+// })
+
+// show log and save log to database
+app.use(morgan('dev', {
+    stream: {
+        write: function (message) {
+
+            console.log(message);
+            const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
+            // console.log('logData', logData)
+
+            Log.create({
+                method: logData[0],
+                path: logData[1],
+                status: logData[2],
+                timeProcess: logData[3] + ' ' + logData[4] + ' ' + logData[5] + ' ' + logData[6],
+                level: 'info',
+                callApiBy: '', // Assuming session.user contains the caller information
+                timestamp: new Date()
+            });
+        }
+    },
+    skip: (req, res) => {
+        return (
+            req.path.startsWith('/assets') ||
+            req.path.startsWith('/device/assets')
+        );
+    }
+}));
 
 
 // app.use('api', router)
@@ -78,17 +83,8 @@ app.use(devicesRoutes)
 
 app.use(errorController.get404) // page not found
 
-
-// Declaring Custom Middleware
-const isLogIn = (req, res, next) => {
-    if (!req.session.isLogIn){
-        return res.render('login-register')
-    }
-    next()
-}
-
 app.listen(port, () => {
-    console.log(`Server runnning on port ${port}`)
+    console.log(`Server running on port ${port}`)
 })
 
 sequelize

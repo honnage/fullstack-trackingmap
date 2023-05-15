@@ -1,6 +1,7 @@
 const Devices = require('../models/devices')
 const devicesServices = require('../services/devices')
 const transactionsServices = require('../services/transactions')
+const userServices = require('../services/user')
 
 const momenttz = require('moment-timezone')
 const db = require('./db')
@@ -11,10 +12,12 @@ exports.getDevice = async (req, res, next) => {
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions =  await transactionsServices.lastTracing_byDevices(req)
+        const user = await userServices.getProfile(req)
 
         const data = {
             devices: devices,
-            tracing: transactions
+            tracing: transactions,
+            user: user
         }
         res.render('tracker', {
             data: data,
@@ -45,10 +48,12 @@ exports.getIndex = async (req, res, next) => {
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions =  await transactionsServices.lastTracing_byDevices(req)
+        const user = await userServices.getProfile(req)
 
         const data = {
             devices: devices,
-            tracing: transactions
+            tracing: transactions,
+            user: user
         }
         res.render('tracker', {
             data: data,

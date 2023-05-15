@@ -10,5 +10,6 @@ router.post('/api/register', authenticationController.register)
 
 router.get('/logout', authenticationController.logout)
 
+router.post('/api/reset-password', authenticationController.resetPassword)
 
 module.exports = router
