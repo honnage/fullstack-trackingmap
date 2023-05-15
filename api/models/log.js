@@ -28,7 +28,7 @@ const Log = sequelize.define('Log', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    functionCallBy: {
+    callApiBy: {
         type: Sequelize.TEXT,
         allowNull: false
     },

@@ -39,7 +39,7 @@ app.use(morgan('dev', {
                 status: logData[2],
                 timeProcess: logData[3] + ' ' + logData[4] + '' + logData[5] + '' + logData[6],
                 level: 'info',
-                functionCallBy: '',
+                callApiBy: '',
                 timestamp: new Date()
             })
         }
