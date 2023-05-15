@@ -5,6 +5,7 @@ const sequelize = require('../util/database')
 const Users = sequelize.define('users', {
     userId: {
         type: Sequelize.STRING,
+        unique: true,
         field: 'userId'
     },
     username: {
