@@ -3,7 +3,27 @@ const bcrypt = require('bcrypt')
 const express = require('express')
 
 
-// กำหนดคีย์เรียกใช้งานคุกกี้เซสชัน (คุณสามารถเปลี่ยนเป็นคีย์อื่น ๆ ที่คุณต้องการ)
+exports.getPageLogin = async (req, res, next) => {
+  try {
+      // const devices = await devicesServices.getAllDevices(req)
+      // const transactions =  await transactionsServices.lastTracing_byDevices(req)
+
+      // const data = {
+      //     devices: devices,
+      //     tracing: transactions
+      // }
+      res.render('login', {
+          // data: data,
+          pageTitle: 'Login',
+          deviceId: '',
+          path: '/login'
+      })
+  } catch (error) {
+      console.log(error);
+      next(error);
+  }
+}
+
 
 exports.register = async (req, res, next) => {
   try {
@@ -46,8 +66,11 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   console.log('login')
+  // console.log('req query', req.query)
+  // console.log('req params', req.params)
+  // console.log('req body', req.body)
   try {
-    const { username, password } = req.query
+    const { username, password } =  req.body
 
     // ตรวจสอบว่าชื่อผู้ใช้และรหัสผ่านไม่ว่างเปล่า
     if (!username || !password) {
@@ -70,17 +93,22 @@ exports.login = async (req, res, next) => {
     req.session.user = { username }
 
     if (!req.session.user) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: 'Unauthorized' })
     }
 
     // ดึงข้อมูลผู้ใช้จาก session.user
     const sessionUser = req.session.user
     console.log('sessionUser', sessionUser)
 
-
-    res.status(200).json({ message: 'Login successful' })
+    // res.status(200).json({ message: 'Login successful' })
+    res.redirect('/')
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Internal server error' })
   }
+}
+
+exports.logout = async (req, res, next) => {
+  req.session = null
+  res.redirect('/login')
 }

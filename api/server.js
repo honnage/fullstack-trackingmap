@@ -17,6 +17,7 @@ const Log = require('./models/log')
 // routes web
 const trackerRoutes = require('./routes/web/tracker')
 const devicesRoutes = require('./routes/web/devices')
+const profileRoutes = require('./routes/web/profile')
 const authenticationRoutes = require('./routes/web/authentication')
 
 
@@ -32,7 +33,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(cors())
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 
@@ -71,6 +72,7 @@ app.use(cookieSession({
 
 // app.use('api', router)
 app.use(authenticationRoutes)
+app.use(profileRoutes)
 app.use(trackerRoutes)
 app.use(devicesRoutes)
 
