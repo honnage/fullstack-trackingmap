@@ -35,7 +35,12 @@ app.set('views', 'views')
 
 
 app.use(morgan('dev', {
-    skip: (req, res) => req.path.startsWith('/assets')
+    skip: (req, res) => {
+        return (
+            req.path.startsWith('/assets') ||
+            req.path.startsWith('/device/assets')
+        )
+    }
 }))
 app.use(cors())
 app.use(express.json())

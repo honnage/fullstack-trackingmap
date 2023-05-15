@@ -5,7 +5,14 @@ const transactionsServices = require('../services/transactions')
 const momenttz = require('moment-timezone')
 const db = require('./db')
 
+exports.getDevice = async (req, res, next) => {
+    console.log('getDevice')
+    console.log('req params', req.params)
+
+}
+
 exports.lastTracing_byDevices = async (req, res, next) => {
+    console.log('lastTracing_byDevices')
     try {
         const transactions =  await transactionsServices.lastTracing_byDevices(req)
         await res.json({

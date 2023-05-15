@@ -6,15 +6,11 @@ const sequelize = require('../util/database')
 exports.lastTracing_byDevices = async (deviceId) => {
     const { QueryTypes } = require('sequelize')
     const devices = sequelize.query(
-        `SELECT trans.*,
-        DATE_FORMAT(trans.createdAt, '%Y-%m-%d %H:%i:%s') AS formattedCreatedAt
-         FROM transactions trans,
-              (SELECT transactions.deviceId, MAX(transactions.createdAt) AS lastDate
-               FROM transactions
-               GROUP BY transactions.deviceId) max_date
-         WHERE trans.deviceId = max_date.deviceId
-           AND trans.createdAt = max_date.lastDate
-         ORDER BY trans.createdAt DESC`,
+        `SELECT trans.*, DATE_FORMAT(trans.createdAt, '%Y-%m-%d %H:%i:%s') AS formattedCreatedAt FROM transactions trans,
+            (SELECT transactions.deviceId, MAX(transactions.createdAt) AS lastDate
+            FROM transactions GROUP BY transactions.deviceId) max_date
+        WHERE trans.deviceId = max_date.deviceId AND trans.createdAt = max_date.lastDate
+        ORDER BY trans.createdAt DESC`,
         {
           type: QueryTypes.SELECT,
           raw: true

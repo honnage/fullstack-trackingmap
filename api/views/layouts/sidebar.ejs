@@ -9,7 +9,7 @@
         <ul id="device-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <% for (let device of data.devices) { %>
           <li>
-            <a href="device/">
+            <a href="/device/<%=device.deviceId%>">
               <i class="bi bi-circle"></i><span>  <%= device.hereName %> </span>
             </a>
           </li>
