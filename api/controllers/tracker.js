@@ -7,6 +7,7 @@ const db = require('./db')
 
 exports.getDevice = async (req, res, next) => {
     const deviceId = req.params.deviceId
+    // console.log('deviceId', deviceId)
     const pathUtl =  `/device/${deviceId}`
     try {
         const devices = await devicesServices.getAllDevices(req)
@@ -29,7 +30,10 @@ exports.getDevice = async (req, res, next) => {
 }
 
 exports.lastTracing_byDevices = async (req, res, next) => {
-    console.log('lastTracing_byDevices')
+    // console.log('lastTracing_byDevices')
+    // console.log('req body', req.body)
+    // console.log('req query', req.query)
+    // console.log('req.params', req.params)
     try {
         const transactions =  await transactionsServices.lastTracing_byDevices(req)
         await res.json({

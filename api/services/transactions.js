@@ -3,8 +3,17 @@ const Transactions = require('../models/transactions')
 
 const sequelize = require('../util/database')
 
-exports.lastTracing_byDevices = async (deviceId) => {
-    const subQuery = `(SELECT transactions.deviceId, MAX(transactions.createdAt) AS lastDate FROM transactions GROUP BY transactions.deviceId) max_date`
+exports.lastTracing_byDevices = async (data) => {
+    // console.log('lastTracing_byDevices deviceId', data.query.deviceId)
+    const deviceId = parseInt(data.query.deviceId)
+    // console.log('deviceId', deviceId)
+
+    let whereQuery = ''
+    if (data.query.deviceId !== undefined ) { // select by deviceId
+        whereQuery = `WHERE transactions.deviceId = '${parseInt(deviceId)}'`
+    }
+
+    const subQuery = `(SELECT transactions.deviceId, MAX(transactions.createdAt) AS lastDate FROM transactions  ${whereQuery} GROUP BY transactions.deviceId) max_date`
     const where = `WHERE trans.deviceId = max_date.deviceId AND trans.createdAt = max_date.lastDate`
     const order = `ORDER BY trans.createdAt DESC`
 
