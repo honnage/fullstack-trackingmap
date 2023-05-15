@@ -8,6 +8,8 @@ const cors = require('cors')
 require('dotenv').config()
 // import router from './routes/api'
 
+// models
+const Log = require('./models/log')
 
 // routes web
 const trackerRoutes = require('./routes/web/tracker')
@@ -19,22 +21,30 @@ const errorController = require('./controllers/error') // controllers error
 const sequelize = require('./util/database')
 
 const port = process.env.SERVER_POST || 3066
-// const db = require('./util/database')
-// db.execute('SELECT * FROM products')
-// .then(result => {
-//     console.log(result)
-// })
-// .catch(err => {
-//     console.log(err)
-// })
-
 const app = express()
 
 app.set('view engine', 'ejs')
 app.set('views', 'views')
 
 
+// show log and save log to database
 app.use(morgan('dev', {
+    stream: {
+        write: function (message) {
+            console.log(message)
+            const logData =  message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ')
+
+            Log.create({
+                method: logData[0],
+                path: logData[1],
+                status: logData[2],
+                timeProcess: logData[3] + ' ' + logData[4] + '' + logData[5] + '' + logData[6],
+                level: 'info',
+                functionCallBy: '',
+                timestamp: new Date()
+            });
+        }
+    },
     skip: (req, res) => {
         return (
             req.path.startsWith('/assets') ||
@@ -42,11 +52,12 @@ app.use(morgan('dev', {
         )
     }
 }))
+
+
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(bodyParser.text())
 
 
 // app.use('api', router)
@@ -59,10 +70,10 @@ app.listen(port, () => {
 })
 
 sequelize
-.sync()
-.then(result => {
-    console.log('Connect database success !!')
-})
-.catch(err => {
-    console.log('Connect database fail !', err)
-})
+    .sync()
+    .then(result => {
+        console.log('Connect database success !!')
+    })
+    .catch(err => {
+        console.log('Connect database fail !', err)
+    })
