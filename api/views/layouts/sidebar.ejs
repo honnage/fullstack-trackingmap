@@ -9,7 +9,7 @@
         <ul id="device-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <% for (let device of data.devices) { %>
           <li>
-            <a href="/device/<%=device.deviceId%>">
+            <a href="/device/<%=device.deviceId%>" class="<%= device.deviceId == deviceId ? 'active' : '' %>" >
               <i class="bi bi-circle"></i><span>  <%= device.hereName %> </span>
             </a>
           </li>
@@ -33,7 +33,7 @@
         <ul id="management-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="components-alerts.html">
-              <i class="bi bi-circle"></i><span>Create Account</span>
+              <i class="bi bi-circle"></i><span>Create Account </span>
             </a>
           </li>
           <li>

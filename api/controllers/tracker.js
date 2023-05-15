@@ -6,9 +6,8 @@ const momenttz = require('moment-timezone')
 const db = require('./db')
 
 exports.getDevice = async (req, res, next) => {
-    console.log('getDevice')
-    console.log('req params', req.params)
-
+    const deviceId = req.params.deviceId
+    const pathUtl =  `/device/${deviceId}`
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions =  await transactionsServices.lastTracing_byDevices(req)
@@ -20,7 +19,8 @@ exports.getDevice = async (req, res, next) => {
         res.render('tracker', {
             data: data,
             pageTitle: 'Device Tracking',
-            path: `${req.params}`
+            path: pathUtl,
+            deviceId: deviceId
         })
     } catch (error) {
         console.log(error);
@@ -54,6 +54,7 @@ exports.getIndex = async (req, res, next) => {
         res.render('tracker', {
             data: data,
             pageTitle: 'Dashboard',
+            deviceId: '',
             path: '/'
         })
     } catch (error) {
@@ -70,8 +71,8 @@ exports.getDashboardTest = async (req, res, next) => {
         }
         res.render('dashboard-test', {
             data: data,
-            pageTitle: 'xx Dashboard',
-            path: '/dashboard-test'
+            pageTitle: 'Dashboard Test',
+            path: '/dashboard-test',
         });
     } catch (error) {
         console.log(error);
