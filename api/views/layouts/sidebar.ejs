@@ -2,11 +2,19 @@
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
+
       <li class="nav-item">
-        <a class="nav-link " data-bs-target="#device-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Dashboard</span><i class="bi bi-chevron-down ms-auto"></i>
+        <a class="<%= path == '/' ? 'nav-link' : 'nav-link collapsed' %>" href="/">
+          <i class="bi bi-grid " ></i>
+          <span>Dashboard</span>
         </a>
-        <ul id="device-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+      </li>
+
+      <li class="nav-item">
+        <a class="<%= path == '/device' ? 'nav-link' : 'nav-link collapsed' %>" data-bs-target="#device-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-menu-button-wide"></i><span>Device</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="device-nav" class="<%= path == '/device' ? 'nav-content collapse' : 'nav-content collapse' %>"  data-bs-parent="#sidebar-nav">
           <% for (let device of data.devices) { %>
           <li>
             <a href="/device/<%=device.deviceId%>" class="<%= device.deviceId == deviceId ? 'active' : '' %>" >
@@ -18,7 +26,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="indexs.html">
+        <a class="nav-link collapsed" href="/">
           <i class="bi bi-grid"></i>
           <span>Dashboard File</span>
         </a>
