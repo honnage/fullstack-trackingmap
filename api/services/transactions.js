@@ -3,13 +3,11 @@ const Transactions = require('../models/transactions')
 
 const sequelize = require('../util/database')
 
-exports.lastTracing_byDevices = async (data) => {
-    // console.log('lastTracing_byDevices deviceId', data.query.deviceId)
-    const deviceId = parseInt(data.query.deviceId)
-    // console.log('deviceId', deviceId)
+exports.lastTracing_byDevices = async (req) => {
+    const deviceId = parseInt(req.query.deviceId)
 
     let whereQuery = ''
-    if (data.query.deviceId !== undefined ) { // select by deviceId
+    if (req.query.deviceId !== undefined ) { // select by deviceId
         whereQuery = `WHERE transactions.deviceId = '${parseInt(deviceId)}'`
     }
 
@@ -25,7 +23,6 @@ exports.lastTracing_byDevices = async (data) => {
           raw: true
         }
       )
-    //   console.log( JSON.stringify(devices)) // Promise { <pending> }
 
     for (let i = 0; i < devices.length; i++) {
         console.log(devices[i])
@@ -34,8 +31,35 @@ exports.lastTracing_byDevices = async (data) => {
         } else {
             devices[i].createdAt = moment(devices[i].createdAt).format('YYYY-MM-DD HH:mm:ss')
         }
-        // console.log('createdAt', devices[i].createdAt)
     }
 
     return devices
+}
+
+
+exports.insertTransactions = async (req) => {
+    // console.log('insertTransactions')
+    // console.log('req body', req.body)
+
+    const formattedTime = moment(req.body.Time, 'YYMMDD,HHmmss').format('YYYY-MM-DD HH:mm:ss')
+    // console.log('formattedTime', formattedTime)
+
+    const data = await Transactions.create({
+        deviceNumber: req.body.Device_Number,
+        GNSSFaultAlarm: req.body.GNSS_Fault_Alarm,
+        GNSSPositionFix: req.body.GNSS_Position_Fix,
+        realTimeDataBuffer: req.body.RealTime_Data_0_BufferData_1,
+        latitude: req.body.Latitude,
+        longitude: req.body.Longitude,
+        altitude: req.body.Altitude,
+        speed: req.body.Speed,
+        direction: req.body.Direction,
+        time: formattedTime,
+        temperature: req.body.Temperature,
+        humidity: req.body.Humidity,
+        batteryVolt: req.body.Battery_Volt,
+        chargeStatus: req.body.Charge_Status,
+        batteryPercent: req.body.Battery_Percent,
+    }, { raw: true })
+    return data
 }

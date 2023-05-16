@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authenticationController = require('../../controllers/authentication')
+const authCheck = require('../../controllers/authMiddleware')
 
 router.get('/login', authenticationController.getPageLogin)
 
@@ -10,6 +11,6 @@ router.post('/api/register', authenticationController.register)
 
 router.get('/logout', authenticationController.logout)
 
-router.post('/api/reset-password', authenticationController.resetPassword)
+router.post('/api/reset-password', authCheck, authenticationController.resetPassword)
 
 module.exports = router

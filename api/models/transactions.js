@@ -3,57 +3,56 @@ const Sequelize = require('sequelize')
 const sequelize = require('../util/database')
 
 const Transactions = sequelize.define('transactions', {
-    type: {
-        type: Sequelize.STRING,
-        field: 'type'
-    },
-    deviceId: {
-        type: Sequelize.STRING,
-        field: 'deviceId'
-    },
-    hereName: {
-        type: Sequelize.STRING,
-        field: 'hereName'
-    },
-    acc: {
+    id: {
         type: Sequelize.INTEGER,
-        field: 'acc'
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true,
     },
-    uploadTrigger: {
+    deviceNumber: {
         type: Sequelize.INTEGER,
-        field: 'uploadTrigger'
     },
-    dateTime: {
-        type: Sequelize.STRING,
-        field: 'dateTime'
+    GNSSFaultAlarm: {
+        type: Sequelize.BOOLEAN,
+    },
+    GNSSPositionFix: {
+        type: Sequelize.BOOLEAN,
+    },
+    realTimeDataBuffer: {
+        type: Sequelize.BOOLEAN,
     },
     latitude: {
         type: Sequelize.STRING,
-        field: 'latitude'
     },
     longitude: {
-        type: Sequelize.STRING,
-        field: 'longitude'
+        type: Sequelize.DOUBLE,
+    },
+    altitude: {
+        type: Sequelize.DOUBLE,
     },
     speed: {
-        type: Sequelize.STRING,
-        field: 'speed'
+        type: Sequelize.INTEGER,
     },
-    attitude: {
-        type: Sequelize.STRING,
-        field: 'attitude'
+    direction: {
+        type: Sequelize.INTEGER,
     },
-    gpsmode: {
-        type: Sequelize.STRING,
-        field: 'gpsmode'
+    time: {
+        type: Sequelize.TIME,
     },
-    gpsfix: {
-        type: Sequelize.STRING,
-        field: 'gpsfix'
+    temperature: {
+        type: Sequelize.DOUBLE,
     },
-    crc: {
-        type: Sequelize.STRING,
-        field: 'crc'
+    humidity: {
+        type: Sequelize.DOUBLE,
+    },
+    batteryVolt: {
+        type: Sequelize.DOUBLE,
+    },
+    chargeStatus: {
+        type: Sequelize.INTEGER,
+    },
+    batteryPercent: {
+        type: Sequelize.INTEGER,
     }
 },
     {
