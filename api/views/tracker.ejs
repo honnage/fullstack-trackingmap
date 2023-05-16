@@ -63,11 +63,11 @@
                 // console.log('data', row)
 
                 for (let i = 0; i < row.length; i++) {
+                  const deviceNumber = row[i].deviceNumber
                   const latitude = row[i].latitude
                   const longitude = row[i].longitude
-                  const hereName = row[i].hereName
-                  const attitude = row[i].attitude
-                  const deviceID = row[i].deviceId
+                  const temperature = row[i].temperature
+                  const batteryPercent = row[i].batteryPercent
                   const lasttime = row[i].formattedCreatedAt
 
                   switch (i) {
@@ -99,9 +99,9 @@
                       .Popup()
                       .setHTML(`
                         <b>Tracker</b><br>
-                        Device ID:  ${deviceID}<br>
-                        Sensor No.: ${hereName}<br>
-                        Temperature: ${attitude}<br>
+                        Device ID:  ${deviceNumber}<br>
+                        Temperature: ${temperature}<br>
+                        Battery: ${batteryPercent} %<br>
                         Last Time: ${lasttime}`))
                     .addTo(map)
                 }
@@ -118,11 +118,11 @@
                 console.log('=> data', row)
 
                 for (let i = 0; i < row.length; i++) {
+                  const deviceNumber = row[i].deviceNumber
                   const latitude = row[i].latitude
                   const longitude = row[i].longitude
-                  const hereName = row[i].hereName
-                  const attitude = row[i].attitude
-                  const deviceID = row[i].deviceId
+                  const temperature = row[i].temperature
+                  const batteryPercent = row[i].batteryPercent
                   const lasttime = row[i].formattedCreatedAt
 
                   switch (i) {
@@ -154,9 +154,9 @@
                       .Popup()
                       .setHTML(`
                         <b>Tracker</b><br>
-                        Device ID:  ${deviceID}<br>
-                        Sensor No.: ${hereName}<br>
-                        Temperature: ${attitude}<br>
+                        Device ID:  ${deviceNumber}<br>
+                        Temperature: ${temperature}<br>
+                        Battery: ${batteryPercent} %<br>
                         Last Time: ${lasttime}`))
                     .addTo(map)
                 }

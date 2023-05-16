@@ -83,6 +83,7 @@ exports.getDashboardTest = async (req, res, next) => {
 }
 
 exports.sendData = async (req, res, next) => {
+    console.log(moment(new Date()).format('YYYYY-MM-DD HH:mm:ss'))
     console.log('sendData', req.body)
     try {
         const transactions = await transactionsServices.insertTransactions(req)
