@@ -17,7 +17,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     port: DB_PORT,
     dialect: 'mysql',
     timezone: "+07:00",
-    logging: false, // log query
+    // logging: false, // log query
     operatorsAliases: false,
     define: {
         // timestamps: false, //disable timestamps 'createdAt' and 'updatedAt'

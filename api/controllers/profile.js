@@ -27,3 +27,17 @@ exports.getProfile = async (req, res, next) => {
         next(error);
     }
 }
+
+exports.updateProfile = async (req, res, next) => {
+    try {
+        // console.log('req body', req.body)
+        const user = await userServices.updateProfile(req)
+        // console.log('return data user', user)
+        return res.redirect('/')
+
+    }catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
