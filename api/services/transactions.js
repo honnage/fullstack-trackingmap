@@ -11,8 +11,8 @@ exports.lastTracing_byDevices = async (req) => {
         whereQuery = `WHERE transactions.deviceId = '${parseInt(deviceId)}'`
     }
 
-    const subQuery = `(SELECT transactions.deviceId, MAX(transactions.createdAt) AS lastDate FROM transactions  ${whereQuery} GROUP BY transactions.deviceId) max_date`
-    const where = `WHERE trans.deviceId = max_date.deviceId AND trans.createdAt = max_date.lastDate`
+    const subQuery = `(SELECT transactions.deviceNumber, MAX(transactions.createdAt) AS lastDate FROM transactions  ${whereQuery} GROUP BY transactions.deviceNumber) max_date`
+    const where = `WHERE trans.deviceNumber = max_date.deviceNumber AND trans.createdAt = max_date.lastDate`
     const order = `ORDER BY trans.createdAt DESC`
 
     const { QueryTypes } = require('sequelize')
@@ -38,12 +38,7 @@ exports.lastTracing_byDevices = async (req) => {
 
 
 exports.insertTransactions = async (req) => {
-    // console.log('insertTransactions')
-    // console.log('req body', req.body)
-
     const formattedTime = moment(req.body.Time, 'YYMMDD,HHmmss').format('YYYY-MM-DD HH:mm:ss')
-    // console.log('formattedTime', formattedTime)
-
     const data = await Transactions.create({
         deviceNumber: req.body.Device_Number,
         GNSSFaultAlarm: req.body.GNSS_Fault_Alarm,

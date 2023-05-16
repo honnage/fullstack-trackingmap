@@ -1,13 +1,9 @@
-const Devices = require('../models/devices')
-
 const devicesServices = require('../services/devices')
 const transactionsServices = require('../services/transactions')
 const userServices = require('../services/user')
 
-
 exports.getDevice = async (req, res, next) => {
     const deviceId = req.params.deviceId
-    // console.log('deviceId', deviceId)
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)
@@ -44,6 +40,7 @@ exports.lastTracing_byDevices = async (req, res, next) => {
 }
 
 exports.getIndex = async (req, res, next) => {
+    console.log('getIndex')
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)

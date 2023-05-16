@@ -10,7 +10,7 @@ const Transactions = sequelize.define('transactions', {
         primaryKey: true,
     },
     deviceNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
     },
     GNSSFaultAlarm: {
         type: Sequelize.BOOLEAN,
@@ -25,7 +25,7 @@ const Transactions = sequelize.define('transactions', {
         type: Sequelize.STRING,
     },
     longitude: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.STRING,
     },
     altitude: {
         type: Sequelize.DOUBLE,
@@ -37,7 +37,7 @@ const Transactions = sequelize.define('transactions', {
         type: Sequelize.INTEGER,
     },
     time: {
-        type: Sequelize.TIME,
+        type: Sequelize.DATE,
     },
     temperature: {
         type: Sequelize.DOUBLE,
