@@ -2,10 +2,10 @@ const express = require('express')
 const { body, validationResult } = require('express-validator')
 const bodyParser = require('body-parser')
 const path = require('path')
-
 const morgan = require('morgan')
 const cors = require('cors')
 const cookieSession = require('cookie-session')
+const momenttz = require('moment-timezone')
 
 require('dotenv').config()
 
@@ -40,30 +40,39 @@ app.use(cookieSession({
     maxAge: 60 * 60 * 1000 // 1 hr
 }))
 
-// ดึงข้อมูลผู้ใช้จาก session.user
-// app.use((req, res, next) => {
-//     console.log('sessionUser', req.session.user)
-//     next()
-// })
+
+morgan.token('time', (req, res, tz) => {
+    return momenttz(new Date()).format('YYYY-MM-DD HH:mm:ss')
+})
+
+morgan.token('sessionUser', (req, res, tz) => {
+    let sessionUser = ' SERVER '
+    if (req.session.user) [
+        sessionUser =  req.session.user.username
+    ]
+    return sessionUser
+})
+
+const customFormat = ':time => :method :url :status :response-time ms - :res[content-length] | CALL API BY => :sessionUser ';
 
 // show log and save log to database
-app.use(morgan('dev', {
+app.use(morgan(customFormat, {
     stream: {
         write: function (message) {
 
             console.log(message);
-            const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
+            // const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
             // console.log('logData', logData)
 
-            Log.create({
-                method: logData[0],
-                path: logData[1],
-                status: logData[2],
-                timeProcess: logData[3] + ' ' + logData[4] + ' ' + logData[5] + ' ' + logData[6],
-                level: 'info',
-                callApiBy: '', // Assuming session.user contains the caller information
-                timestamp: new Date()
-            });
+            // Log.create({
+            //     method: logData[0],
+            //     path: logData[1],
+            //     status: logData[2],
+            //     timeProcess: logData[3] + ' ' + logData[4] + ' ' + logData[5] + ' ' + logData[6],
+            //     level: 'info',
+            //     callApiBy: '', // Assuming session.user contains the caller information
+            //     timestamp: new Date()
+            // });
         }
     },
     skip: (req, res) => {
