@@ -4,10 +4,17 @@ const Transactions = require('../models/transactions')
 
 const devicesServices = require('../services/devices')
 
+const Sequelize = require('sequelize')
+const { QueryTypes } = require('sequelize')
+
 exports.transactions = async (req) => {
-    const transactions = await Transactions.findAll(
-        { raw: true }
-    )
+    const transactions = await Transactions.findAll({
+        attributes: [
+          '*',
+          [Sequelize.literal("DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s')"), 'formatTime']
+        ],
+        raw: true
+      });
     return transactions
 }
 
@@ -23,7 +30,7 @@ exports.lastTracing_byDevices = async (req) => {
     const where = `WHERE trans.deviceNumber = max_date.deviceNumber AND trans.createdAt = max_date.lastDate`
     const order = `ORDER BY trans.createdAt DESC`
 
-    const { QueryTypes } = require('sequelize')
+
     const devices = sequelize.query(
         `SELECT trans.*, DATE_FORMAT(trans.createdAt, '%Y-%m-%d %H:%i:%s') AS formattedCreatedAt FROM transactions trans, ${subQuery} ${where} ${order} `,
         {

@@ -13,6 +13,7 @@ require('dotenv').config()
 const Log = require('./models/log')
 
 // routes web
+const transactionsRoutes = require('./routes/web/transactions')
 const trackerRoutes = require('./routes/web/tracker')
 const devicesRoutes = require('./routes/web/devices')
 const profileRoutes = require('./routes/web/profile')
@@ -61,7 +62,6 @@ app.use(morgan(customFormat, {
         write: function (message) {
             console.log(message)
             const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
-            // console.log('logData', logData)
             let data = {
                 method: logData[2],
                 path: logData[3],
@@ -95,6 +95,7 @@ app.use(morgan(customFormat, {
 
 // app.use('api', router)
 app.use(authenticationRoutes)
+app.use(transactionsRoutes)
 app.use(profileRoutes)
 app.use(trackerRoutes)
 app.use(devicesRoutes)
