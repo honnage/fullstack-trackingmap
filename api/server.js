@@ -1,5 +1,4 @@
 const express = require('express')
-const { body, validationResult } = require('express-validator')
 const bodyParser = require('body-parser')
 const path = require('path')
 const morgan = require('morgan')
@@ -53,28 +52,28 @@ morgan.token('sessionUser', (req, res, tz) => {
     return sessionUser
 })
 
-const customFormat = ':time => :method :url :status :response-time ms - :res[content-length] | CALL API BY => :sessionUser ';
+const customFormat = ':time => :method :url :status :response-time ms - :res[content-length]  ||  CALL API BY  =>  :sessionUser ';
 
 // show log and save log to database
 app.use(morgan(customFormat, {
-    stream: {
-        write: function (message) {
+    // stream: {
+    //     write: function (message) {
 
-            console.log(message);
-            // const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
-            // console.log('logData', logData)
+    //         // console.log(message)
+    //         // const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
+    //         // console.log('logData', logData)
 
-            // Log.create({
-            //     method: logData[0],
-            //     path: logData[1],
-            //     status: logData[2],
-            //     timeProcess: logData[3] + ' ' + logData[4] + ' ' + logData[5] + ' ' + logData[6],
-            //     level: 'info',
-            //     callApiBy: '', // Assuming session.user contains the caller information
-            //     timestamp: new Date()
-            // });
-        }
-    },
+    //         // Log.create({
+    //         //     method: logData[0],
+    //         //     path: logData[1],
+    //         //     status: logData[2],
+    //         //     timeProcess: logData[3] + ' ' + logData[4] + ' ' + logData[5] + ' ' + logData[6],
+    //         //     level: 'info',
+    //         //     callApiBy: '', // Assuming session.user contains the caller information
+    //         //     timestamp: new Date()
+    //         // });
+    //     }
+    // },
     skip: (req, res) => {
         return (
             req.path.startsWith('/assets') ||

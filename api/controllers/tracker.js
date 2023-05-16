@@ -40,13 +40,12 @@ exports.lastTracing_byDevices = async (req, res, next) => {
 }
 
 exports.getIndex = async (req, res, next) => {
-    console.log('getIndex')
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)
         const user = await userServices.getProfile(req)
 
-        console.log('transactions', transactions)
+        // console.log('transactions', transactions)
         const data = {
             devices: devices,
             tracing: transactions,
