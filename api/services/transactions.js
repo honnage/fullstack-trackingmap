@@ -1,7 +1,15 @@
 const moment = require('moment')
+const sequelize = require('../util/database')
 const Transactions = require('../models/transactions')
 
-const sequelize = require('../util/database')
+const devicesServices = require('../services/devices')
+
+exports.transactions = async (req) => {
+    const transactions = await Transactions.findAll(
+        { raw: true }
+    )
+    return transactions
+}
 
 exports.lastTracing_byDevices = async (req) => {
     const deviceId = parseInt(req.query.deviceId)
@@ -38,6 +46,17 @@ exports.lastTracing_byDevices = async (req) => {
 
 
 exports.insertTransactions = async (req) => {
+    const findDevices = await devicesServices.findDevices(req)
+    if(findDevices == null) {
+        const insertDevices = await devicesServices.insertDevices(req)
+        .then(result => {
+            console.log('insert data devices')
+        })
+        .catch(err => {
+            console.log('error', err)
+        })
+    }
+
     const formattedTime = moment(req.body.Time, 'YYMMDD,HHmmss').format('YYYY-MM-DD HH:mm:ss')
     const data = await Transactions.create({
         deviceNumber: req.body.Device_Number,

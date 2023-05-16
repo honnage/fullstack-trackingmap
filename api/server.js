@@ -5,7 +5,8 @@ const morgan = require('morgan')
 const cors = require('cors')
 const cookieSession = require('cookie-session')
 const moment = require('moment')
-const momenttz = require('moment-timezone');
+const momenttz = require('moment-timezone')
+const timeZone = 'Asia/Bangkok'
 require('dotenv').config()
 
 // models
@@ -41,7 +42,6 @@ app.use(cookieSession({
 
 
 morgan.token('time', (req, res, tz) => {
-    const timeZone = 'Asia/Bangkok'
     return  momenttz().tz(timeZone).format('YYYY-MM-DD HH:mm:ss')
 })
 
@@ -68,7 +68,7 @@ app.use(morgan(customFormat, {
                 status: logData[4],
                 timeProcess: logData[5] + ' ' + logData[6] + ' ' + logData[7] + ' ' + logData[8],
                 callApiBy: logData[9],
-                timestamp: new Date()
+                timestamp: momenttz().tz(timeZone).format('YYYY-MM-DD HH:mm:ss')
             }
             // console.log('data', data)
 
