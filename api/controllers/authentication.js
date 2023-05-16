@@ -105,7 +105,7 @@ exports.logout = async (req, res, next) => {
 
 
 exports.resetPassword = async (req, res, next) => {
-  // console.log('=== resetPassword')
+  console.log('=== resetPassword')
   // console.log('req.params', req.params)
   // console.log('req.query', req.query)
   // console.log('req.body', req.body)

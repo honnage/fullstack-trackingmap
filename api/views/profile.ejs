@@ -60,7 +60,9 @@
 
                   <!-- user <%= data.user %> -->
                   <!-- Profile Edit Form -->
-                  <form>
+                  <form >
+                    <input type="hidden" name="userId"  id="userId" value="<%= data.user.id %>" >
+
                     <div class="row mb-3">
                       <label for="firstname" class="col-md-4 col-lg-3 col-form-label">First name</label>
                       <div class="col-md-8 col-lg-9">
@@ -98,7 +100,7 @@
 
                 <div class="tab-pane fade pt-3" id="profile-change-password">
                   <!-- Change Password Form -->
-                  <form action="/api/reset-password" method="POST" >
+                  <form action="/api/reset-password" method="post">
 
                     <!-- <div class="row mb-3">
                       <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>

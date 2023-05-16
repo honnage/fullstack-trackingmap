@@ -69,7 +69,8 @@ app.use(morgan('dev', {
     skip: (req, res) => {
         return (
             req.path.startsWith('/assets') ||
-            req.path.startsWith('/device/assets')
+            req.path.startsWith('/device/assets') ||
+            req.path.startsWith('/api/assets')
         );
     }
 }));
