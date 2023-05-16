@@ -16,7 +16,7 @@ exports.pageTransactions = async (req, res, next) => {
         res.render('transactions', {
             data: data,
             pageTitle: 'Transactions',
-            deviceId: '',
+            deviceNumber: '',
             path: '/transactions',
         });
     } catch (error) {

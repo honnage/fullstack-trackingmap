@@ -17,7 +17,7 @@
         <ul id="device-nav" class="<%= path == '/device' ? 'nav-content collapse' : 'nav-content collapse' %>"  data-bs-parent="#sidebar-nav">
           <% for (let device of data.devices) { %>
           <li>
-            <a href="/device/<%=device.deviceNumber%>" class="<%= device.deviceId == deviceId ? 'active' : '' %>" >
+            <a href="/device/<%=device.deviceNumber%>" class="<%= device.deviceNumber == deviceNumber ? 'active' : '' %>" >
               <i class="bi bi-circle"></i><span>  <%= device.deviceNumber %> </span>
             </a>
           </li>

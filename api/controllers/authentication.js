@@ -7,7 +7,7 @@ exports.getPageLogin = async (req, res, next) => {
     res.render('login', {
       // data: data,
       pageTitle: 'Login',
-      deviceId: '',
+      deviceNumber: '',
       path: '/login'
     })
   } catch (error) {

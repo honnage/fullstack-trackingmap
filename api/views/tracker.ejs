@@ -22,11 +22,11 @@
 </head>
 
 <body>
-    <%- include('./layouts/header.ejs') %>
-    <%- include('./layouts/sidebar.ejs') %>
+  <%- include('./layouts/header.ejs') %>
+  <%- include('./layouts/sidebar.ejs') %>
 
       <main id="main">
-          <div id='map'></div>
+        <div id='map'></div>
       </main>
 
       <script>
@@ -40,14 +40,14 @@
 
         map.addControl(new mapboxgl.NavigationControl(), 'top-left'); // เพิ่มปุ่ม zoom in และ zoom out ด้านซ้ายบน
 
-        let deviceID = 'ALAP-TCP-1(957)'
+        let deviceNumber = 'ALAP-TCP-1(957)'
         let temperature = 30
         let lat = '100.6060742686167'
         let longi = '13.855035407124465'
 
         // let marker1 = new mapboxgl.Marker()
         // .setLngLat([100.5843378, 13.8767561])
-        // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceId}<br>Temperature: ${temperature}`))
+        // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceNumber}<br>Temperature: ${temperature}`))
         // .addTo(map);
 
         function getData() {
@@ -57,54 +57,11 @@
           let row = []
           if (id !== '') {
             // console.log('select device by id')
-            axios.get('/lastTracing', { params: { deviceId: id} })
+            axios.get('/lastTracing', { params: { deviceNumber: id } })
               .then(response => {
                 row = response.data.data
                 // console.log('data', row)
-
-                for (let i = 0; i < row.length; i++) {
-                  const deviceNumber = row[i].deviceNumber
-                  const latitude = row[i].latitude
-                  const longitude = row[i].longitude
-                  const temperature = row[i].temperature
-                  const batteryPercent = row[i].batteryPercent
-                  const lasttime = row[i].formattedCreatedAt
-
-                  switch (i) {
-                    case 0:
-                      colorColor = "red";
-                      break;
-                    case 1:
-                      colorColor = "blue";
-                      break;
-                    case 2:
-                      colorColor = "black";
-                      break;
-                    case 3:
-                      colorColor = "orange";
-                      break;
-                    case 4:
-                      colorColor = "green";
-                      break;
-                    case 5:
-                      colorColor = "brown";
-                      break;
-                    case 6:
-                      colorColor = "purple";
-                  }
-
-                  let marker = new mapboxgl.Marker({ color: colorColor, rotation: 0 })
-                    .setLngLat([longitude, latitude])
-                    .setPopup(new mapboxgl
-                      .Popup()
-                      .setHTML(`
-                        <b>Tracker</b><br>
-                        Device ID:  ${deviceNumber}<br>
-                        Temperature: ${temperature}<br>
-                        Battery: ${batteryPercent} %<br>
-                        Last Time: ${lasttime}`))
-                    .addTo(map)
-                }
+                markerPin(row)
               })
               .catch(error => {
                 console.log(error);
@@ -116,56 +73,60 @@
               .then(response => {
                 row = response.data.data
                 console.log('=> data', row)
-
-                for (let i = 0; i < row.length; i++) {
-                  const deviceNumber = row[i].deviceNumber
-                  const latitude = row[i].latitude
-                  const longitude = row[i].longitude
-                  const temperature = row[i].temperature
-                  const batteryPercent = row[i].batteryPercent
-                  const lasttime = row[i].formattedCreatedAt
-
-                  switch (i) {
-                    case 0:
-                      colorColor = "red";
-                      break;
-                    case 1:
-                      colorColor = "blue";
-                      break;
-                    case 2:
-                      colorColor = "black";
-                      break;
-                    case 3:
-                      colorColor = "orange";
-                      break;
-                    case 4:
-                      colorColor = "green";
-                      break;
-                    case 5:
-                      colorColor = "brown";
-                      break;
-                    case 6:
-                      colorColor = "purple";
-                  }
-
-                  let marker = new mapboxgl.Marker({ color: colorColor, rotation: 0 })
-                    .setLngLat([longitude, latitude])
-                    .setPopup(new mapboxgl
-                      .Popup()
-                      .setHTML(`
-                        <b>Tracker</b><br>
-                        Device ID:  ${deviceNumber}<br>
-                        Temperature: ${temperature}<br>
-                        Battery: ${batteryPercent} %<br>
-                        Last Time: ${lasttime}`))
-                    .addTo(map)
-                }
+                markerPin(row)
               })
               .catch(error => {
                 console.log(error);
               })
           }
 
+        }
+
+        function markerPin(row) {
+          for (let i = 0; i < row.length; i++) {
+            const deviceNumber = row[i].deviceNumber
+            const latitude = row[i].latitude
+            const longitude = row[i].longitude
+            const temperature = row[i].temperature
+            const batteryPercent = row[i].batteryPercent
+            const lasttime = row[i].formattedCreatedAt
+
+            switch (i) {
+              case 0:
+                colorColor = "red";
+                break;
+              case 1:
+                colorColor = "blue";
+                break;
+              case 2:
+                colorColor = "black";
+                break;
+              case 3:
+                colorColor = "orange";
+                break;
+              case 4:
+                colorColor = "green";
+                break;
+              case 5:
+                colorColor = "brown";
+                break;
+              case 6:
+                colorColor = "purple";
+            }
+
+            let marker = new mapboxgl.Marker({ color: colorColor, rotation: 0 })
+              .setLngLat([longitude, latitude])
+              .setPopup(new mapboxgl
+                .Popup()
+                .setHTML(`
+                  Device ID:  ${deviceNumber}<br>
+                  Latitude: ${latitude}<br>
+                  Longitude: ${longitude}<br>
+                  Temperature: ${temperature}<br>
+                  Battery: ${batteryPercent} %<br>
+                  Last Time: ${lasttime}`))
+              .addTo(map)
+          }
         }
 
         setInterval(function () {

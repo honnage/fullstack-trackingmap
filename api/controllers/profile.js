@@ -19,7 +19,7 @@ exports.getProfile = async (req, res, next) => {
         res.render('profile', {
             data: data,
             pageTitle: 'Profile',
-            deviceId: '',
+            deviceNumber: '',
             path: '/profile'
         })
     } catch (error) {

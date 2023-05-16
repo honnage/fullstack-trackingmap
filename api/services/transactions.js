@@ -11,7 +11,8 @@ exports.transactions = async (req) => {
     const transactions = await Transactions.findAll({
         attributes: [
           '*',
-          [Sequelize.literal("DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s')"), 'formatTime']
+          [Sequelize.literal("DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s')"), 'formatTime'],
+          [Sequelize.literal("DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s')"), 'formatCreatedAt']
         ],
         raw: true
       });
@@ -19,11 +20,11 @@ exports.transactions = async (req) => {
 }
 
 exports.lastTracing_byDevices = async (req) => {
-    const deviceId = parseInt(req.query.deviceId)
+    const deviceNumber = parseInt(req.query.deviceNumber)
 
     let whereQuery = ''
-    if (req.query.deviceId !== undefined ) { // select by deviceId
-        whereQuery = `WHERE transactions.deviceId = '${parseInt(deviceId)}'`
+    if (req.query.deviceNumber !== undefined ) { // select by deviceNumber
+        whereQuery = `WHERE transactions.deviceNumber = '${parseInt(deviceNumber)}'`
     }
 
     const subQuery = `(SELECT transactions.deviceNumber, MAX(transactions.createdAt) AS lastDate FROM transactions  ${whereQuery} GROUP BY transactions.deviceNumber) max_date`

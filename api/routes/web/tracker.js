@@ -6,7 +6,7 @@ const authCheck = require('../../controllers/authMiddleware')
 
 router.get('/', authCheck, trackerController.getIndex)
 
-router.get('/device/:deviceId', authCheck, trackerController.getDevice) // by device
+router.get('/device/:deviceNumber', authCheck, trackerController.getDevice) // by device
 
 router.get('/dashboard-test', authCheck, trackerController.getDashboardTest)
 

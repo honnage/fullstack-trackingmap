@@ -3,7 +3,8 @@ const transactionsServices = require('../services/transactions')
 const userServices = require('../services/user')
 
 exports.getDevice = async (req, res, next) => {
-    const deviceId = req.params.deviceNumber
+    console.log('getDevice')
+    const deviceNumber = req.params.deviceNumber
     try {
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)
@@ -18,7 +19,7 @@ exports.getDevice = async (req, res, next) => {
             data: data,
             pageTitle: 'Device Tracking',
             path: '/device',
-            deviceId: deviceId
+            deviceNumber: deviceNumber
         })
     } catch (error) {
         console.log(error);
@@ -54,7 +55,7 @@ exports.getIndex = async (req, res, next) => {
         res.render('tracker', {
             data: data,
             pageTitle: 'Dashboard',
-            deviceId: '',
+            deviceNumber: '',
             path: '/'
         })
     } catch (error) {
@@ -72,7 +73,7 @@ exports.getDashboardTest = async (req, res, next) => {
         res.render('dashboard-test', {
             data: data,
             pageTitle: 'Dashboard Test',
-            deviceId: '',
+            deviceNumber: '',
             path: '/dashboard-test',
         });
     } catch (error) {
