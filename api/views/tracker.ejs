@@ -115,7 +115,7 @@
             axios.get('/lastTracing')
               .then(response => {
                 row = response.data.data
-                // console.log('data', row)
+                console.log('=> data', row)
 
                 for (let i = 0; i < row.length; i++) {
                   const latitude = row[i].latitude

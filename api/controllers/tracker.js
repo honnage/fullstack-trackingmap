@@ -46,6 +46,7 @@ exports.getIndex = async (req, res, next) => {
         const transactions = await transactionsServices.lastTracing_byDevices(req)
         const user = await userServices.getProfile(req)
 
+        console.log('transactions', transactions)
         const data = {
             devices: devices,
             tracing: transactions,
@@ -82,7 +83,7 @@ exports.getDashboardTest = async (req, res, next) => {
 }
 
 exports.sendData = async (req, res, next) => {
-    console.log('sendData')
+    console.log('sendData', req.body)
     try {
         const transactions = await transactionsServices.insertTransactions(req)
         .then(result => {
