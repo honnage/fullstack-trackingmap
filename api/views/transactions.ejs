@@ -41,11 +41,14 @@
                                         <div class="col-md-5">
                                             <label for="validationDefault01" class="form-label">Device Number</label>
                                             <div class="col-sm-10">
-                                                <select class="form-select" aria-label="Default select example" id="deviceNumber" name="deviceNumber">
+                                                <select class="form-select" aria-label="Default select example"
+                                                    id="deviceNumber" name="deviceNumber">
                                                     <option selected>All Device</option>
 
                                                     <% for (let device of data.devices) { %>
-                                                        <option value="<%= device.deviceNumber %>"> <%= device.deviceNumber %></option>
+                                                        <option value="<%= device.deviceNumber %>">
+                                                            <%= device.deviceNumber %>
+                                                        </option>
                                                     <% } %>
                                                 </select>
                                             </div>
@@ -84,53 +87,59 @@
 
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Transactions</h5>
+                                    <!-- <h5 class="card-title">Transactions</h5> -->
 
-                                    <!-- Table with stripped rows -->
-                                    <table class="table datatable">
-                                        <thead>
-                                            <tr>
-                                                <!-- <th scope="col">#</th> -->
-                                                <th style="text-align: center;" scope="col">Device Number</th>
-                                                <th style="text-align: center;" scope="col">Latitude</th>
-                                                <th style="text-align: center;" scope="col">Longitude</th>
-                                                <th style="text-align: center;" scope="col">Temperature</th>
-                                                <th style="text-align: center;" scope="col">Battery Percent</th>
-                                                <th style="text-align: center;" scope="col">Time</th>
-                                                <th style="text-align: center;" scope="col">Created At</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <% for (let row of data.transactions) { %>
+                                    <div class="table-responsive">
+                                        <!-- Table with stripped rows -->
+                                        <table class="table datatable">
+                                            <thead>
                                                 <tr>
-                                                    <!-- <th scope="row">1</th> -->
-                                                    <td style="text-align: center;">
-                                                        <%= row.deviceNumber %>
-                                                    </td>
-                                                    <td style="text-align: right;">
-                                                        <%= row.latitude %>
-                                                    </td>
-                                                    <td style="text-align: right;">
-                                                        <%= row.longitude %>
-                                                    </td>
-                                                    <td style="text-align: right;">
-                                                        <%= row.temperature %>
-                                                    </td>
-                                                    <td style="text-align: right;">
-                                                        <%= row.batteryPercent %> %
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <%= row.formatTime %>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        <%= row.formatCreatedAt %>
-                                                    </td>
-
+                                                    <!-- <th scope="col">#</th> -->
+                                                    <th style="text-align: center;" scope="col">Device Number</th>
+                                                    <th style="text-align: center;" scope="col">Latitude</th>
+                                                    <th style="text-align: center;" scope="col">Longitude</th>
+                                                    <th style="text-align: center;" scope="col">Temperature</th>
+                                                    <th style="text-align: center;" scope="col">Humidity</th>
+                                                    <th style="text-align: center;" scope="col">Battery Percent</th>
+                                                    <th style="text-align: center;" scope="col">Time</th>
+                                                    <th style="text-align: center;" scope="col">Created At</th>
                                                 </tr>
-                                                <% } %>
-                                        </tbody>
-                                    </table>
-                                    <!-- End Table with stripped rows -->
+                                            </thead>
+                                            <tbody>
+                                                <% for (let row of data.transactions) { %>
+                                                    <tr>
+                                                        <!-- <th scope="row">1</th> -->
+                                                        <td style="text-align: center;">
+                                                            <%= row.deviceNumber %>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <%= row.latitude %>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <%= row.longitude %>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <%= row.temperature %>
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <%= row.humidity %> %
+                                                        </td>
+                                                        <td style="text-align: right;">
+                                                            <%= row.batteryPercent %> %
+                                                        </td>
+                                                        <td style="text-align: center; min-width: 200px;">
+                                                            <%= row.formatTime %>
+                                                        </td>
+                                                        <td style="text-align: center; min-width: 200px;">
+                                                            <%= row.formatCreatedAt %>
+                                                        </td>
+
+                                                    </tr>
+                                                    <% } %>
+                                            </tbody>
+                                        </table>
+                                        <!-- End Table with stripped rows -->
+                                    </div>
                                 </div>
                             </div>
 

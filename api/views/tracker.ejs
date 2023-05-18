@@ -35,33 +35,27 @@
           container: 'map',
           style: 'mapbox://styles/mapbox/streets-v11', // สามารถเปลี่ยนได้ตามต้องการ
           center: [100.6060742685167, 13.855035407124475], // กำหนดพิกัดเริ่มต้นของแผนที่ latitude, longitude
-          zoom: 10 // กำหนดระดับการซูมเริ่มต้น
+          zoom: 9 // กำหนดระดับการซูมเริ่มต้น
         });
 
         map.addControl(new mapboxgl.NavigationControl(), 'top-left'); // เพิ่มปุ่ม zoom in และ zoom out ด้านซ้ายบน
 
-        let deviceNumber = 'ALAP-TCP-1(957)'
-        let temperature = 30
-        let lat = '100.6060742686167'
-        let longi = '13.855035407124465'
-
-        // let marker1 = new mapboxgl.Marker()
-        // .setLngLat([100.5843378, 13.8767561])
-        // .setPopup(new mapboxgl.Popup().setHTML(`<b>Tracker</b><br>Sensor No.: ${deviceNumber}<br>Temperature: ${temperature}`))
-        // .addTo(map);
 
         function getData() {
           const url = window.location.href;
           const id = url.split("/").pop();
+          let currentDate = new Date()
+          let formattedDate = currentDate.toISOString().slice(0, 19).replace("T", " ")
 
-          let row = []
+          let data = []
+          console.log('last time ------>', formattedDate)
           if (id !== '') {
             // console.log('select device by id')
             axios.get('/lastTracing', { params: { deviceNumber: id } })
               .then(response => {
-                row = response.data.data
-                // console.log('data', row)
-                markerPin(row)
+                data = response.data.data
+                console.log('data', data)
+                createMarkers(data)
               })
               .catch(error => {
                 console.log(error);
@@ -71,9 +65,9 @@
             // console.log('select device all')
             axios.get('/lastTracing')
               .then(response => {
-                row = response.data.data
-                console.log('=> data', row)
-                markerPin(row)
+                data = response.data.data
+                console.log('=> data', data)
+                createMarkers(data)
               })
               .catch(error => {
                 console.log(error);
@@ -82,16 +76,22 @@
 
         }
 
-        function markerPin(row) {
-          for (let i = 0; i < row.length; i++) {
-            const deviceNumber = row[i].deviceNumber
-            const latitude = row[i].latitude
-            const longitude = row[i].longitude
-            const temperature = row[i].temperature
-            const batteryPercent = row[i].batteryPercent
-            const lasttime = row[i].formattedCreatedAt
+        let markers = [];
 
-            switch (i) {
+        function createMarkers(data) {
+          data.forEach((item, index) => {
+            const {
+              deviceNumber,
+              latitude,
+              longitude,
+              temperature,
+              humidity,
+              batteryPercent,
+              formattedCreatedAt,
+              posmap
+            } = item
+
+            switch (index) {
               case 0:
                 colorColor = "red";
                 break;
@@ -114,34 +114,46 @@
                 colorColor = "purple";
             }
 
-            let marker = new mapboxgl.Marker({ color: colorColor, rotation: 0 })
-              .setLngLat([longitude, latitude])
-              .setPopup(new mapboxgl
-                .Popup()
-                .setHTML(`
-                  Device ID:  ${deviceNumber}<br>
-                  Latitude: ${latitude}<br>
-                  Longitude: ${longitude}<br>
-                  Temperature: ${temperature}<br>
-                  Battery: ${batteryPercent} %<br>
-                  Last Time: ${lasttime}`))
-              .addTo(map)
-          }
+            // Temperature:  <span style="float: right; margin-right: 20px;">${temperature}</span><br>
+            // Humidity:     <span style="float: right; margin-right: 20px;">${humidity} %</span><br>
+
+            if (posmap == true) {
+              let marker = new mapboxgl.Marker({ color: 'red', rotation: 0 })
+                .setLngLat([longitude, latitude])
+                .setPopup(new mapboxgl.Popup()
+                  .setHTML(`
+                  Device ID:    <span style="float: right; margin-right: 20px;">${deviceNumber}</span><br>
+                  Latitude:     <span style="float: right; margin-right: 20px;">${latitude}</span><br>
+                  Longitude:    <span style="float: right; margin-right: 20px;">${longitude}</span><br>
+                  Temperature:  <span style="float: right; margin-right: 20px;${(temperature > 40 ) ? 'color: red;' : ''}">${temperature} %</span><br>
+                  Humidity:     <span style="float: right; margin-right: 20px;${(humidity > 40 ) ? 'color: red;' : ''}">${humidity} %</span><br>
+                  Battery:      <span style="float: right; margin-right: 20px;">${batteryPercent} %</span><br>
+                  Last Time: ${formattedCreatedAt}`))
+                .addTo(map)
+              markers.push(marker)
+            }
+          })
         }
 
-        setInterval(function () {
-          console.log('reface')
-        }, (60 * 1000));
+        function removeMarkers() {
+          markers.forEach(marker => {
+            marker.remove()
+          })
 
-        function initial() {
-          getData()
+          markers = []
+          console.log(' ')
+          // console.log('removeMarkers')
         }
 
-        initial()
 
-        setInterval(function () {
-          getData()
-        }, (60 * 1000));
+        // เรียกใช้ฟังก์ชัน createMarkers ในครั้งแรก
+        getData()
+
+        // สร้าง marker ใหม่ทุกๆ 5 นาที
+        setInterval(() => {
+          removeMarkers()
+          getData();
+        }, 1 * 1000 * 60 )
 
       </script>
 

@@ -1,9 +1,10 @@
 const Devices = require('../models/devices')
 
 exports.getAllDevices = async (req) => {
-    const devices = await Devices.findAll(
-        { raw: true }
-    )
+    const devices = await Devices.findAll({
+        order: [['deviceNumber', 'DESC']],
+        raw: true
+    })
     return devices
 }
 

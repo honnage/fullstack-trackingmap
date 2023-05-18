@@ -3,7 +3,6 @@ const transactionsServices = require('../services/transactions')
 const userServices = require('../services/user')
 
 exports.getDevice = async (req, res, next) => {
-    console.log('getDevice')
     const deviceNumber = req.params.deviceNumber
     try {
         const devices = await devicesServices.getAllDevices(req)
@@ -30,6 +29,7 @@ exports.getDevice = async (req, res, next) => {
 exports.lastTracing_byDevices = async (req, res, next) => {
     try {
         const transactions = await transactionsServices.lastTracing_byDevices(req)
+        // console.log('transactions', transactions)
         await res.json({
             data: transactions,
         })
