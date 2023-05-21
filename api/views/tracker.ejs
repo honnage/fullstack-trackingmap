@@ -44,36 +44,34 @@
         function getData() {
           const url = window.location.href;
           const id = url.split("/").pop();
-          let currentDate = new Date()
-          let formattedDate = currentDate.toISOString().slice(0, 19).replace("T", " ")
+          let currentDate = new Date();
+          let formattedDate = currentDate.toISOString().slice(0, 19).replace("T", " ");
 
-          let data = []
-          console.log('last time ------>', formattedDate)
+          let data = [];
+          console.log('last time ------>', formattedDate);
           if (id !== '') {
-            // console.log('select device by id')
-            axios.get('/lastTracing', { params: { deviceNumber: id } })
+            axios
+              .get('/lastTracing', { params: { deviceNumber: id } })
               .then(response => {
-                data = response.data.data
-                console.log('data', data)
-                createMarkers(data)
+                data = response.data.data;
+                console.log('data', data);
+                createMarkers(data);
               })
               .catch(error => {
                 console.log(error);
-              })
-
+              });
           } else {
-            // console.log('select device all')
-            axios.get('/lastTracing')
+            axios
+              .get('/lastTracing')
               .then(response => {
-                data = response.data.data
-                console.log('=> data', data)
-                createMarkers(data)
+                data = response.data.data;
+                console.log('=> data', data);
+                createMarkers(data);
               })
               .catch(error => {
                 console.log(error);
-              })
+              });
           }
-
         }
 
         let markers = [];
@@ -125,8 +123,8 @@
                   Device ID:    <span style="float: right; margin-right: 20px;">${deviceNumber}</span><br>
                   Latitude:     <span style="float: right; margin-right: 20px;">${latitude}</span><br>
                   Longitude:    <span style="float: right; margin-right: 20px;">${longitude}</span><br>
-                  Temperature:  <span style="float: right; margin-right: 20px;${(temperature > 40 ) ? 'color: red;' : ''}">${temperature} %</span><br>
-                  Humidity:     <span style="float: right; margin-right: 20px;${(humidity > 40 ) ? 'color: red;' : ''}">${humidity} %</span><br>
+                  Temperature:  <span style="float: right; margin-right: 20px;${(temperature > 40) ? 'color: red;' : ''}">${temperature} </span><br>
+                  Humidity:     <span style="float: right; margin-right: 20px;${(humidity > 40) ? 'color: red;' : ''}">${humidity} %</span><br>
                   Battery:      <span style="float: right; margin-right: 20px;">${batteryPercent} %</span><br>
                   Last Time: ${formattedCreatedAt}`))
                 .addTo(map)
@@ -153,7 +151,7 @@
         setInterval(() => {
           removeMarkers()
           getData();
-        }, 1 * 1000 * 60 )
+        }, 1 * 1000 * 60)
 
       </script>
 

@@ -43,8 +43,14 @@ app.use(cookieSession({
 
 
 morgan.token('time', (req, res, tz) => {
-    return  momenttz().tz(timeZone).format('YYYY-MM-DD HH:mm:ss')
+    const formattedTime = momenttz().tz(timeZone).format('YYYY-MM-DD HH:mm:ss');
+    return `\x1b[32m${formattedTime}\x1b[0m`; // สีเขียว
 })
+
+morgan.token('method', (req, res) => {
+    const coloredMethod = `\x1b[33m${req.method}\x1b[0m`; // สีเหลือง
+    return coloredMethod;
+});
 
 morgan.token('sessionUser', (req, res, tz) => {
     let sessionUser = 'SERVER'
@@ -55,12 +61,12 @@ morgan.token('sessionUser', (req, res, tz) => {
 })
 
 const customFormat = ':time :method :url :status :response-time ms - :res[content-length] :sessionUser ';
-
-// show log and save log to database
 app.use(morgan(customFormat, {
     stream: {
         write: function (message) {
             console.log(message)
+            console.log('')
+
             const logData = message.replace(/\x1B\[[0-9;]*[a-zA-Z]/g, '').split(' ');
             let data = {
                 method: logData[2],

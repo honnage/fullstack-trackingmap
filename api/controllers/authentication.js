@@ -1,6 +1,8 @@
 const Users = require('../models/user')
 const bcrypt = require('bcrypt')
-
+const saltRounds = 12
+const jwt = require('jsonwebtoken')
+const secretKey = 'login-test'
 
 exports.getPageLogin = async (req, res, next) => {
   try {
@@ -39,7 +41,7 @@ exports.register = async (req, res, next) => {
     }
 
     // เข้ารหัสรหัสผ่าน
-    const hashedPassword = await bcrypt.hash(password, 12)
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
 
     // สร้างผู้ใช้งานใหม่ในฐานข้อมูล
     const newUser = await Users.create({ username, password: hashedPassword })
@@ -57,9 +59,6 @@ exports.register = async (req, res, next) => {
 
 
 exports.login = async (req, res, next) => {
-  // console.log('req query', req.query)
-  // console.log('req params', req.params)
-  // console.log('req body', req.body)
   try {
     const { username, password } = req.body
 
@@ -69,18 +68,28 @@ exports.login = async (req, res, next) => {
     }
 
     // ค้นหาผู้ใช้จากชื่อผู้ใช้ในฐานข้อมูล
-    const user = await Users.findOne({ where: { username } })
+    const user = await Users.findOne({
+      where: { username },
+      raw: true
+    })
     if (!user) {
       return res.redirect('/')
-      // return res.status(401).json({ message: 'Invalid username or password' })
+      // return res.status(401).json({ message: 'Invalid username or password', redirect: '/' });
     }
 
     // เปรียบเทียบรหัสผ่านที่ป้อนเข้ามากับรหัสผ่านที่เข้ารหัสในฐานข้อมูล
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
       return res.redirect('/')
-      // return res.status(401).json({ message: 'Invalid username or password' })
+      // return res.status(401).json({ message: 'Invalid username or password', redirect: '/' });
     }
+
+    const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+    // console.log('token', token)
+    // console.log('token', token)
+
+    // // เก็บ Token ในเซสชัน (หรือในตำแหน่งที่คุณต้องการ)
+    // req.session.token = token;
 
     // สร้างเซสชัน
     req.session.user = { username }
@@ -90,7 +99,7 @@ exports.login = async (req, res, next) => {
     }
 
 
-    // res.status(200).json({ message: 'Login successful' })
+    // res.status(200).json({ message: 'Login successful', token })
     res.redirect('/')
   } catch (error) {
     console.error(error)
@@ -129,7 +138,7 @@ exports.resetPassword = async (req, res, next) => {
     }
 
     // เข้ารหัสรหัสผ่านใหม่
-    const hashedPassword = await bcrypt.hash(newPassword, 12)
+    const hashedPassword = await bcrypt.hash(newPassword, saltRounds)
 
     // อัปเดตรหัสผ่านใหม่ในฐานข้อมูล
     await Users.update({ password: hashedPassword }, { where: { id: userId } })

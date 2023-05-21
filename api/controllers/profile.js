@@ -9,11 +9,13 @@ exports.getProfile = async (req, res, next) => {
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)
         const user = await userServices.getProfile(req)
+        const notification = transactions.filter(row => row.temperature >= 40 || row.humidity >= 40);
 
         const data = {
             devices: devices,
             tracing: transactions,
-            user: user
+            user: user,
+            notification: notification
         }
 
         res.render('profile', {

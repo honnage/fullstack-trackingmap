@@ -9,26 +9,48 @@ const devicesServices = require('../services/devices')
 
 const Sequelize = require('sequelize')
 const { QueryTypes } = require('sequelize')
+const { Op } = require("sequelize")
+
+async function setupWhere(req) {
+    const today = new Date();
+    let startOfDay = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)).format('YYYY-MM-DD HH:mm:ss')
+    let endOfDay = moment(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)).format('YYYY-MM-DD HH:mm:ss')
+    let whereFilter = {}
+
+    // filfter datetime
+    req.query.datetime != undefined && req.query.datetime != ''
+        ? whereFilter.createdAt = {
+            [Sequelize.Op.between]: [
+                moment(moment(req.query.datetime).startOf('day').toDate()).format('YYYY-MM-DD HH:mm:ss'),
+                moment(moment(req.query.datetime).endOf('day').toDate()).format('YYYY-MM-DD HH:mm:ss')
+            ]
+        }
+        : whereFilter.createdAt = {
+            [Sequelize.Op.between]: [startOfDay, endOfDay]
+        }
+
+    // filfter deviceNumber
+    req.query.deviceNumber != undefined && req.query.deviceNumber != ''
+        ? whereFilter.deviceNumber = req.query.deviceNumber
+        : delete whereFilter.deviceNumber
+
+    return whereFilter
+}
 
 exports.transactions = async (req) => {
-    // const today = new Date();
-    // const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-    // const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
-
+    let whereFilter = await setupWhere(req)
     const transactions = await Transactions.findAll({
         attributes: [
-          '*',
-          [Sequelize.literal("DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s')"), 'formatTime'],
-          [Sequelize.literal("DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s')"), 'formatCreatedAt']
+            '*',
+            [Sequelize.literal("DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s')"), 'formatTime'],
+            [Sequelize.literal("DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s')"), 'formatCreatedAt']
         ],
-        // where: {
-        // createdAt: {
-        //         [Sequelize.Op.between]: [startOfDay, endOfDay]
-        //     }
-        // },
+        where: whereFilter,
         order: [['createdAt', 'DESC']],
         raw: true
-      });
+    });
+
+    console.log('data transactions length', transactions.length)
     return transactions
 }
 
@@ -36,7 +58,7 @@ exports.lastTracing_byDevices = async (req) => {
     const deviceNumber = parseInt(req.query.deviceNumber)
     // console.log('lastTracing_byDevices deviceNumber', deviceNumber)
     let whereQuery = ''
-    if (req.query.deviceNumber !== undefined ) { // select by deviceNumber
+    if (req.query.deviceNumber !== undefined) { // select by deviceNumber
         whereQuery = `WHERE transactions.deviceNumber = ${parseInt(deviceNumber)}`
     }
     // console.log('whereQuery', whereQuery)
@@ -44,16 +66,13 @@ exports.lastTracing_byDevices = async (req) => {
     const subQuery = `(SELECT transactions.deviceNumber, MAX(transactions.createdAt) AS lastDate FROM transactions  ${whereQuery} GROUP BY transactions.deviceNumber) max_date`
     const where = `WHERE trans.deviceNumber = max_date.deviceNumber AND trans.createdAt = max_date.lastDate`
     const order = `ORDER BY trans.createdAt DESC`
-
-
     const devices = await sequelize.query(
         `SELECT trans.*, DATE_FORMAT(trans.createdAt, '%Y-%m-%d %H:%i:%s') AS formattedCreatedAt FROM transactions trans, ${subQuery} ${where} ${order} `,
         {
-          type: QueryTypes.SELECT,
-          raw: true
+            type: QueryTypes.SELECT,
+            raw: true
         }
-      )
-    //   console.log('devices', devices)
+    )
 
     for (let i = 0; i < devices.length; i++) {
         let checkLatitude = false
@@ -74,22 +93,18 @@ exports.lastTracing_byDevices = async (req) => {
             checkLongitude = true
         }
 
-        if(checkLatitude != true || checkLongitude != true) {
-            // console.log(i)
-            // console.log('checkLatitude', checkLatitude)
-            // console.log('checkLongitude', checkLongitude)
-            // console.log(devices[i])
+        if (checkLatitude != true || checkLongitude != true) {
             posmap = false
             checkData = 'GPS data is problem'
         } else {
             posmap = true
         }
 
-        if(checkLongitude == false || checkLongitude == false) {
+        if (checkLongitude == false || checkLongitude == false) {
             checkData = 'Location data is problem'
         }
 
-        if(checkTemperature == false ) {
+        if (checkTemperature == false) {
             checkData = 'Temperature data is problem'
         }
 
@@ -103,14 +118,14 @@ exports.lastTracing_byDevices = async (req) => {
 
 exports.insertTransactions = async (req) => {
     const findDevices = await devicesServices.findDevices(req)
-    if(findDevices == null) {
+    if (findDevices == null) {
         const insertDevices = await devicesServices.insertDevices(req)
-        .then(result => {
-            console.log('insert data devices')
-        })
-        .catch(err => {
-            console.log('error', err)
-        })
+            .then(result => {
+                console.log('insert data devices')
+            })
+            .catch(err => {
+                console.log('error', err)
+            })
     }
     // const formattedTime = moment(req.body.Time, 'YYMMDD,HHmmss').format('YYYY-MM-DD HH:mm:ss')
     // const formattedTime = moment.tz(req.body.Time, 'YYMMDD,HHmmss', 'Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');

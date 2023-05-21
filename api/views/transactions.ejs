@@ -5,6 +5,9 @@
     <%- include('./layouts/head.ejs') %>
         <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
         <link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 
 <body>
@@ -17,33 +20,21 @@
 
                 <div class="pagetitle" style="padding-top: 10px;">
                     <h1>Transactions</h1>
-                    <!-- <nav>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/">Home</a></li>
-                            <li class="breadcrumb-item active">Transactions</li>
-                        </ol>
-                    </nav> -->
-                </div><!-- End Page Title -->
+                </div>
 
                 <section class="section">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <!-- <h5 class="card-title"></h5> -->
-                                    <!-- <p>Browser default validation with using the <code>required</code> keyword. Try
-                                        submitting the form below. Depending on your browser and OS, you’ll see a
-                                        slightly different style of feedback.</p> -->
 
-                                    <!-- Browser Default Validation -->
-
-                                    <form class="row g-3">
+                                    <form class="row g-3" action="/transactions" method="GET" >
                                         <div class="col-md-5">
                                             <label for="validationDefault01" class="form-label">Device Number</label>
                                             <div class="col-sm-10">
                                                 <select class="form-select" aria-label="Default select example"
                                                     id="deviceNumber" name="deviceNumber">
-                                                    <option selected>All Device</option>
+                                                    <option selected value="">All Device</option>
 
                                                     <% for (let device of data.devices) { %>
                                                         <option value="<%= device.deviceNumber %>">
@@ -54,18 +45,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
-                                            <label for="validationDefault02" class="form-label">Selete Datetime</label>
-                                            <div class="col-sm-12">
-                                                <div class="input-group date" id="datepicker" name="datepicker">
-                                                    <input type="text" class="form-control">
-                                                    <span class="input-group-append">
-                                                        <span class="input-group-text bg-white">
-                                                            <i class="fa fa-calendar"></i>
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            </div>
+                                        <div class="col-md-2">
+                                            <label for="datetime" class="form-label">Selete Datetime</label>
+                                            <input class="form-control" type="date" id="datetime" name="datetime" >
                                         </div>
 
                                         <div class="col-md-2">
@@ -133,7 +115,6 @@
                                                         <td style="text-align: center; min-width: 200px;">
                                                             <%= row.formatCreatedAt %>
                                                         </td>
-
                                                     </tr>
                                                     <% } %>
                                             </tbody>
@@ -153,6 +134,7 @@
                 $(function () {
                     $('#datepicker').datepicker();
                 });
+            </script>
             </script>
 
             <%- include('./layouts/footer.ejs') %>

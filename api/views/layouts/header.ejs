@@ -33,37 +33,30 @@
 
           <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
             <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">2</span>
+            <span class="badge bg-primary badge-number"><%= data.notification.length %></span>
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
             <li class="dropdown-header">
-              You have 2 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+
+              You have <%= data.notification.length %> new notifications
+              <!-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> -->
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
+            <% for (let noti of data.notification) { %>
             <li class="notification-item">
               <i class="bi bi-exclamation-circle text-warning"></i>
               <div>
-                <h4>DEMO Over temperature</h4>
-                <p>Device ID:059060715186</p>
-                <p>There is a temperature 40</p>
-                <p>2023-05-18 11:40:35</p>
-              </div>
+                <h4>Device: <%= noti.deviceNumber %></h4>
+                <p>Temperature <%= noti.temperature %></p>
+                <p>Humidity <%= noti.humidity %> %</p>
+                <p>Last date <%= noti.formattedCreatedAt %></p>
+               </div>
             </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>DEMO Over humidit</h4>
-                <p>Device ID:059060715186</p>
-                <p>There is a humidit 47.2 %</p>
-                <p>2023-05-18 11:40:35</p>
-              </div>
-            </li>
+            <% } %>
 
             <li>
               <hr class="dropdown-divider">

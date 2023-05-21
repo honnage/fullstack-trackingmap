@@ -3,16 +3,18 @@ const transactionsServices = require('../services/transactions')
 const userServices = require('../services/user')
 
 exports.getDevice = async (req, res, next) => {
-    const deviceNumber = req.params.deviceNumber
     try {
+        const deviceNumber = req.params.deviceNumber
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)
         const user = await userServices.getProfile(req)
+        const notification = transactions.filter(row => row.temperature >= 40 || row.humidity >= 40);
 
         const data = {
             devices: devices,
             tracing: transactions,
-            user: user
+            user: user,
+            notification: notification
         }
         res.render('tracker', {
             data: data,
@@ -29,6 +31,10 @@ exports.getDevice = async (req, res, next) => {
 exports.lastTracing_byDevices = async (req, res, next) => {
     try {
         const transactions = await transactionsServices.lastTracing_byDevices(req)
+
+        // console.log(notification);
+        // console.log('notification', notification.length)
+
         // console.log('transactions', transactions)
         await res.json({
             data: transactions,
@@ -45,12 +51,14 @@ exports.getIndex = async (req, res, next) => {
         const devices = await devicesServices.getAllDevices(req)
         const transactions = await transactionsServices.lastTracing_byDevices(req)
         const user = await userServices.getProfile(req)
+        const notification = transactions.filter(row => row.temperature >= 40 || row.humidity >= 40);
 
         // console.log('transactions', transactions)
         const data = {
             devices: devices,
             tracing: transactions,
-            user: user
+            user: user,
+            notification: notification
         }
         res.render('tracker', {
             data: data,

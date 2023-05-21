@@ -7,11 +7,13 @@ exports.pageTransactions = async (req, res, next) => {
         const devices = await devicesServices.getAllDevices(req)
         const user = await userServices.getProfile(req)
         const transactions = await transactionsServices.transactions(req)
+        const notification = transactions.filter(row => row.temperature >= 40 || row.humidity >= 40);
 
         const data = {
             devices: devices,
             user: user,
-            transactions: transactions
+            transactions: transactions,
+            notification: notification
         }
         res.render('transactions', {
             data: data,
