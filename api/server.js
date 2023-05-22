@@ -4,13 +4,19 @@ const path = require('path')
 const morgan = require('morgan')
 const cors = require('cors')
 const cookieSession = require('cookie-session')
+
+require('dotenv').config()
+
+const timeZone = 'Asia/Bangkok'
 const moment = require('moment')
 const momenttz = require('moment-timezone')
-const timeZone = 'Asia/Bangkok'
-require('dotenv').config()
+const sequelize = require('./util/database')
+const value = require('./config/setup')
+
 
 // models
 const Log = require('./models/log')
+
 
 // routes web
 const transactionsRoutes = require('./routes/web/transactions')
@@ -19,11 +25,16 @@ const devicesRoutes = require('./routes/web/devices')
 const profileRoutes = require('./routes/web/profile')
 const authenticationRoutes = require('./routes/web/authentication')
 
+// routes api
+const authRoutesAPI = require('./routes/api/auth')
+
+
+
 // controllers
 const errorController = require('./controllers/error') // controllers error
-const sequelize = require('./util/database')
 
-const port = process.env.SERVER_POST || 3066
+
+const port = value.port
 const app = express()
 
 app.set('view engine', 'ejs')
@@ -100,11 +111,14 @@ app.use(morgan(customFormat, {
 
 
 // app.use('api', router)
+app.use('/api/v2', authRoutesAPI)
+
 app.use(authenticationRoutes)
 app.use(transactionsRoutes)
 app.use(profileRoutes)
 app.use(trackerRoutes)
 app.use(devicesRoutes)
+
 
 app.use(errorController.get404) // page not found
 

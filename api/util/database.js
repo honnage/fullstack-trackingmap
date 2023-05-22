@@ -1,10 +1,11 @@
 const Sequelize = require('sequelize')
+const value = require('../config/setup')
 
-const DB_NAME = process.env.DB_NAME || 'tracker'
-const DB_USER = process.env.DB_USER || 'root'
-const DB_PASSWORD = process.env.DB_PASSWORD || ''
-const DB_HOST = process.env.DB_HOST || 'localhost'
-const DB_PORT = process.env.DB_PORT || 3306
+const DB_NAME = value.DB_NAME
+const DB_USER = value.DB_USER
+const DB_PASSWORD = value.DB_PASSWORD
+const DB_HOST = value.DB_HOST
+const DB_PORT = value.DB_PORT
 
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
@@ -12,7 +13,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
     port: DB_PORT,
     dialect: 'mysql',
     timezone: "+07:00",
-    // logging: false, // log query
+    logging: false, // log query
     operatorsAliases: false,
     define: {
         // timestamps: false, //disable timestamps 'createdAt' and 'updatedAt'
