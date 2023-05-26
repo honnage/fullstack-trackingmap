@@ -1,10 +1,13 @@
+const value = require('../config/setup') // process.env.JWT_SECRET || 'key@test'
+
 const Users = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const value = require('../config/setup') // process.env.JWT_SECRET || 'key@test'
-
+const tokenServices = require('../services/token')
 
 export async function login(req, res, next) {
+    console.log('login', req.body)
+
     const { username, password } = req.body
 
     // ตรวจสอบว่าชื่อผู้ใช้และรหัสผ่านไม่ว่างเปล่า
@@ -28,8 +31,15 @@ export async function login(req, res, next) {
         return res.status(402).json({ message: 'Invalid username or password', redirect: '/' });
     }
 
-    const token = jwt.sign({ username }, value.secretKey, { expiresIn: '1h' })
-    return res.json({ token, username })
+    console.log('>> username', username)
+    // const token = jwt.sign({ username }, value.secretKey, { expiresIn: '1h' })
+
+    let token = await tokenServices.encode(username)
+    let token_decode = await tokenServices.decode(token)
+
+    console.log('token', token)
+
+    return res.status(200).json({ token, username })
 }
 
 

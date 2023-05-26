@@ -1,26 +1,39 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '../views/HomeView.vue'
+import Login from '../views/Login.vue'
+// import store from '../store/index'
 
 const routes = [
   {
-    path: "/",
-    name: "home",
+    path: '/',
+    name: 'home',
     component: HomeView,
+    meta: {auth: true}
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: '/login',
+    name: 'login',
+    component: Login
   },
-];
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes,
-});
+  routes
+})
 
-export default router;
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth) { // ต้องการสิทธิ์การเข้าถึง
+    // const token = store.state.token;
+    const token = localStorage.getItem('token-user')
+
+    if (token) { // ตรวจสอบว่ามี token หรือไม่
+      next(); // มี token ให้ไปต่อ
+    } else {
+      next('/login'); // ไม่มี token ให้เปลี่ยนเส้นทางไปยังหน้า "/login"
+    }
+  } else {
+    next(); // ไม่ต้องการสิทธิ์การเข้าถึง ให้ไปต่อโดยไม่ต้องตรวจสอบ token
+  }
+});
+export default router
