@@ -7,7 +7,7 @@ const value = {
     DB_HOST: process.env.DB_HOST || 'localhost',
     DB_PORT: process.env.DB_PORT || 3306,
 
-    secretKey: process.env.JWT_SECRET || 'key@test',
+    JWT_SecretKey: process.env.JWT_SECRET || 'key@test',
 }
 
 module.exports = value

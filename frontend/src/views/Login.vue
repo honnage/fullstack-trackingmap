@@ -1,67 +1,81 @@
 <template>
-  <div class="register container">
-    <div class="row">
-      <div class="col-md-3"></div>
-      <div class="col-md-6">
-        <img src="/logo.png" alt="Logo" class="img-logo" />
-        <div class="card">
-          <h1 class="card-header">LOGIN</h1>
-          <div class="card-body">
-            <a-form
-              :model="formState"
-              name="basic"
-              :wrapper-col="{ span: 24 }"
-              @submit.prevent="onSubmit()"
-            >
-              <div class="form-item-wrapper">
-                <a-form-item
-                  name="username"
-                  :rules="[
-                    {
-                      required: true,
-                      message: 'Please input your username!',
-                    },
-                  ]"
-                >
-                  <label for="username" class="label"> ชื่อผู้ใช้งาน </label>
-                  <a-input v-model:value="formState.username" />
-                </a-form-item>
-              </div>
+  <div class="container">
+    <section
+      class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4"
+    >
+      <div class="container">
+        <div class="row justify-content-center">
+          <div
+            class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center"
+          >
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="pt-4 pb-2">
+                  <h5 class="card-title text-center pb-0 fs-4">
+                    Login to Your Account
+                  </h5>
+                  <p class="text-center small">
+                    Enter your username & password to login
+                  </p>
+                </div>
 
-              <div class="form-item-wrapper">
-                <a-form-item
-                  name="password"
-                  :rules="[
-                    {
-                      required: true,
-                      message: 'Please input your password!',
-                    },
-                  ]"
+                <a-form
+                  :model="formState"
+                  name="basic"
+                  :wrapper-col="{ span: 24 }"
+                  @submit.prevent="onSubmit()"
+                  class="row g-3 needs-validation"
                 >
-                  <label for="password" class="label"> รหัสผ่าน </label>
-                  <a-input-password v-model:value="formState.password" />
-                </a-form-item>
-              </div>
+                  <div class="form-item-wrapper">
+                    <a-form-item
+                      name="username"
+                      :rules="[
+                        {
+                          required: true,
+                          message: 'Please input your username!',
+                        },
+                      ]"
+                    >
+                      <label for="username" class="label"> username </label>
+                      <a-input v-model:value="formState.username" />
+                    </a-form-item>
+                  </div>
 
-              <div class="form-group buttons">
-                <button type="submit" class="btn btn-info btn-block">
-                  เข้าสู่ระบบ
-                </button>
+                  <div class="form-item-wrapper">
+                    <a-form-item
+                      name="password"
+                      :rules="[
+                        {
+                          required: true,
+                          message: 'Please input your password!',
+                        },
+                      ]"
+                    >
+                      <label for="password" class="label"> password </label>
+                      <a-input-password v-model:value="formState.password" />
+                    </a-form-item>
+                  </div>
 
-                <button
-                  type="button"
-                  @click="onRedirectToRegister()"
-                  class="btn btn-secondary btn-block"
-                >
-                  ลงทะเบียน
-                </button>
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary w-100">
+                      Login
+                    </button>
+                  </div>
+                </a-form>
               </div>
-            </a-form>
+            </div>
+
+            <div class="credits">
+              <!-- All the links in the footer should remain intact. -->
+              <!-- You can delete the links only if you purchased the pro version. -->
+              <!-- Licensing information: https://bootstrapmade.com/license/ -->
+              <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+              Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
           </div>
         </div>
       </div>
-      <div class="col-md-3"></div>
-    </div>
+    </section>
   </div>
 </template>
 <script>
@@ -121,11 +135,11 @@ export default defineComponent({
         .then((response) => {
           console.log("response", response.data);
 
-          this.$store.commit('setToken', response.data.token);
-          localStorage.setItem("token-user", JSON.stringify(response.data.token));
-          localStorage.setItem("username", JSON.stringify(response.data.username));
+          this.$store.commit("setToken", response.data.token);
+          localStorage.setItem("user-token", response.data.token);
+          localStorage.setItem("user-info", JSON.stringify(response.data.userInfo));
 
-          console.log('this.$store.state.token', this.$store.state.token)
+          console.log("this.$store.state.token", this.$store.state.token);
           this.$router.push("/");
 
           this.openNotificationWithIcon(

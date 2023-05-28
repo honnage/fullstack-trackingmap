@@ -20,23 +20,23 @@ async function checkToken(token) {
         raw: true
     })
     if (user) {
-        const token = jwt.sign({ _id: fiterId }, value.secretKey, { expiresIn: '1h' })
+        const token = jwt.sign({ _id: fiterId }, value.JWT_SecretKey, { expiresIn: '1h' })
         return { token }
     } else {
         return false
     }
 }
 
-export async function encode (username) {
-    console.log('encode', username)
-    const token = jwt.sign({username}, value.secretKey, {expiresIn: '1h'})
+export async function encode(username) {
+    // console.log('encode', username)
+    const token = jwt.sign({ username }, value.JWT_SecretKey, { expiresIn: '1h' })
     return token;
 }
 
-export async function decode (token) {
-    console.log('decode', token)
+export async function decode(token) {
+    // console.log('decode', token)
     try {
-        const { username, iat, exp } = await jwt.verify(token, value.secretKey)
+        const { username, iat, exp } = await jwt.verify(token, value.JWT_SecretKey)
 
         const iatDate = moment(new Date(iat * 1000)).format('YYYY-MM-DD HH:mm:ss')
         const expDate = moment(new Date(exp * 1000)).format('YYYY-MM-DD HH:mm:ss')

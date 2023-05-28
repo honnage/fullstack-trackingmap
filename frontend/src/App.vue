@@ -1,30 +1,118 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav> -->
-  <router-view/>
+  <template v-if="$route.path != '/login'">
+    <body :class="toggleSidebar == true ? 'toggle-sidebar' : ''">
+      <HeaderLayout
+        :toggleSidebar="toggleSidebar"
+        @toggle-menu="toggleCollapsed"
+      />
+
+      <MenuLayout @back-to-top="BackToTop" />
+
+      <main id="main" class="main">
+        <router-view />
+      </main>
+
+      <!-- <FooterLayout /> -->
+
+      <!-- <button class="floating-button" @click="BackToTop">
+      <i class="bi bi-arrow-up-short"></i>
+    </button> -->
+
+      <button
+        v-show="showBackToTop"
+        class="floating-button"
+        @click="scrollToTop"
+      >
+        <i class="bi bi-arrow-up-short"></i>
+      </button>
+    </body>
+  </template>
+
+  <template v-else>
+    <router-view />
+  </template>
 </template>
 
-<!-- <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import HeaderLayout from "@/components/layouts/Header";
+import MenuLayout from "@/components/layouts/Menu";
+// import FooterLayout from "@/components/layouts/Footer";
+
+export default {
+  components: {
+    HeaderLayout,
+    MenuLayout,
+    // FooterLayout,
+  },
+  data() {
+    return {
+      toggleSidebar: false,
+    };
+  },
+  methods: {
+    toggleCollapsed() {
+      this.toggleSidebar = !this.toggleSidebar;
+      console.log("this.toggleSidebar", this.toggleSidebar);
+    },
+
+    BackToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      console.log("BackToTop");
+    },
+
+    handleScroll() {
+      if (window.pageYOffset > 100) {
+        this.showBackToTop = true;
+      } else {
+        this.showBackToTop = false;
+      }
+    },
+
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    },
+  },
+};
+</script>
+
+<style>
+i {
+  font-size: 26px;
+  padding: 16px;
 }
 
-nav {
-  padding: 30px;
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s ease;
 }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+.floating-button:hover {
+  background-color: #0056b3;
 }
-</style> -->
+</style>

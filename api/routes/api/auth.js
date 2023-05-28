@@ -7,6 +7,8 @@ const auth = require('../../middleware/auth')
 
 router.post('/login', authController.login)
 
+router.post('/logout', authController.logout)
+
 router.get('/userlist', auth.checkToken, authController.userlist)
 
 

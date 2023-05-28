@@ -2,7 +2,7 @@ const Users = require('../models/user')
 const bcrypt = require('bcrypt')
 const saltRounds = 12
 const jwt = require('jsonwebtoken')
-const secretKey = 'login-test'
+const JWT_SecretKey = 'login-test'
 
 exports.getPageLogin = async (req, res, next) => {
   try {
@@ -84,7 +84,7 @@ exports.login = async (req, res, next) => {
       // return res.status(401).json({ message: 'Invalid username or password', redirect: '/' });
     }
 
-    const token = jwt.sign({ username }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ username }, JWT_SecretKey, { expiresIn: '1h' });
     // console.log('token', token)
     // console.log('token', token)
 
