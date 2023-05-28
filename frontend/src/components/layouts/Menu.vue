@@ -53,11 +53,11 @@ export default defineComponent({
   },
 
   mounted() {
-    console.log("router", router.options.routes);
+    // console.log("router", router.options.routes);
     this.routes = router.options.routes.filter(
       (route) => route.meta?.auth === true
     );
-    console.log("this.routes length", this.routes.length);
+    // console.log("this.routes length", this.routes.length);
 
   },
 

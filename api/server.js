@@ -26,7 +26,7 @@ const profileRoutes = require('./routes/web/profile')
 const authenticationRoutes = require('./routes/web/authentication')
 
 // routes api
-const authRoutesAPI = require('./routes/api/auth')
+const authRoutesAPI = require('./routes/api')
 
 
 
@@ -66,9 +66,9 @@ morgan.token('method', (req, res) => {
 
 morgan.token('sessionUser', (req, res, tz) => {
     let sessionUser = 'SERVER'
-    if (req.session.user) [
-        sessionUser =  req.session.user.username
-    ]
+    // if (req.session.user) [
+    //     sessionUser =  req.session.user.username
+    // ]
     return sessionUser
 })
 

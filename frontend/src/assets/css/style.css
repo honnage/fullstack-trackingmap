@@ -41,17 +41,17 @@ h6 {
 # Main
 --------------------------------------------------------------*/
 #main {
-  margin-top: 54px;
+  /* margin-top: 54px; */
   padding-left: 1px;
-  padding-right: 2px;
-  /* padding: 20px 30px; */
+  padding-right: 1px;
+  /* padding: 20px 20px; */
   transition: all 0.3s;
 }
 
 @media (max-width: 1199px) {
   #main {
-    /* padding: 20px; */
-    padding-left: 1px;
+    /* padding-top: 20px; */
+    padding-left: 2px;
     padding-right: 2px;
   }
 }

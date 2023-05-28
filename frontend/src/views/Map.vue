@@ -1,5 +1,5 @@
 <template>
-  <div class="pagetitle">
+  <div class="conten-custom">
     <h1>Map</h1>
 
     <nav>

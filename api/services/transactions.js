@@ -34,10 +34,13 @@ async function setupWhere(req) {
         ? whereFilter.deviceNumber = req.query.deviceNumber
         : delete whereFilter.deviceNumber
 
+    console.log('whereFilter', whereFilter)
+
     return whereFilter
 }
 
 exports.transactions = async (req) => {
+    console.log('servie transactions', req.body)
     let whereFilter = await setupWhere(req)
     const transactions = await Transactions.findAll({
         attributes: [

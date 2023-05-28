@@ -52,7 +52,7 @@ export default {
   methods: {
     toggleCollapsed() {
       this.toggleSidebar = !this.toggleSidebar;
-      console.log("this.toggleSidebar", this.toggleSidebar);
+      // console.log("this.toggleSidebar", this.toggleSidebar);
     },
 
     BackToTop() {
@@ -114,5 +114,13 @@ i {
 
 .floating-button:hover {
   background-color: #0056b3;
+}
+
+.conten-custom {
+  margin-top: 60px;
+  margin-bottom: auto;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 </style>

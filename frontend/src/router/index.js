@@ -3,7 +3,7 @@ import Login from '@/views/Login.vue'
 import NotFound from '@/views/404.vue'
 
 import Dashboard from '@/views/Dashboard.vue'
-// import MapView from '@/views/Map.vue'
+import Transactions from '@/views/Transactions.vue'
 
 
 const routes = [
@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/Transactions',
     name: 'Transactions',
-    component: Dashboard,
+    component: Transactions,
     icon: 'bi bi-layout-text-window-reverse',
     meta: { auth: true }
   },

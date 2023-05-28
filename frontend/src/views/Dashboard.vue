@@ -1,6 +1,5 @@
 <!-- eslint-disable no-unused-vars -->
 <template>
-
   <div id="map"></div>
 </template>
 
@@ -52,19 +51,23 @@ export default {
       let data = [];
       console.log("last time ------>", formattedDate);
       if (id !== "") {
-        axios
-          .get("/lastTracing", { params: { deviceNumber: id } })
-          .then((response) => {
-            data = response.data.data;
-            console.log("data", data);
-            this.createMarkers(data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        // axios
+        //   .get("/lastTracing", { params: { deviceNumber: id } })
+        //   .then((response) => {
+        //     data = response.data.data;
+        //     console.log("data", data);
+        //     this.createMarkers(data);
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
       } else {
         axios
-          .get("/lastTracing")
+          .get("api/v2/lastTracing", {
+            headers: {
+              token: localStorage.getItem('user-token'),
+            },
+          })
           .then((response) => {
             data = response.data.data;
             console.log("=> data", data);
@@ -152,11 +155,10 @@ export default {
 </script>
 
 <style scoped>
-
 #map {
   position: absolute;
   /* bottom: 0; */
-  /* top: 120px; */
+  top: 60px;
   /* left: 0;
   right: 0; */
   /* margin-top: 0;
